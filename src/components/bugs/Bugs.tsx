@@ -13,26 +13,16 @@ export interface Category {
     bugs: Bug[];
 }
 
-
 const categories: Category[] = bugData as Category[];
 
-
 export function Bugs() {
-
     return (
-        <>
-            <header>
-                <h1>Bugs Journal</h1>
-                <span>Find cool exotic bugs, one sighting at a time!</span>
-            </header>
-            <main>
-                <Search />
-                <CategoryList categories={categories} />
-            </main>
-        </>
+        <section className="bugs">
+            <Search />
+            <CategoryList categories={categories} />
+        </section>
     );
 }
-
 
 function CategoryList({ categories }: { categories: Category[] }) {
     const categorySections: JSX.Element[] = [];
@@ -73,8 +63,7 @@ function BugItem({ bug }: { bug: Bug }) {
 }
 
 function Search() {
-
-    return(
+    return (
         <section className="search">
             <h2>What bug are you looking for?</h2>
             <form action="#">
@@ -84,8 +73,5 @@ function Search() {
         </section>
     );
 }
-
-
-
 
 export default Bugs;
