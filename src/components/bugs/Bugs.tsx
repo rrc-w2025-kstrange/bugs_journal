@@ -55,7 +55,7 @@ function CategorySection({ category }: { category: Category }) {
     return (
         <section className="category">
             <h3>{category.name}</h3>
-            <ul className="category__list">{bugItems}</ul>
+            <ul className="category_list">{bugItems}</ul>
         </section>
     );
 }
