@@ -1,17 +1,19 @@
-// Sample Data
-type Bug = {
-    id: number,
-    name: string,
-    scientificName?: string
-};
+import bugData from "../../data/bugs.json";
 
-const testBugs: Bug[] = [
-    {id: 0, name: "Goliath Beetle", scientificName: "Goliathus goliatus"},
-    {id: 1, name: "Atlas Moth", scientificName: "Attacus atlas"},
-    {id: 2, name: "Orchid Mantis", scientificName: "Hymenopus coronatus"},
-    {id: 3, name: "Leaf Insect", scientificName: "Phyllium giganteum"},
-    {id: 4, name: "Jewel Beetle"}
-];
+export interface Bug {
+    id: number;
+    name: string;
+    scientificName?: string;
+}
+
+export interface Category {
+    id: number;
+    name: string;
+    bugs: Bug[];
+}
+
+
+const categories: Category[] = bugData as Category[];
 
 
 export function Bugs() {
@@ -24,12 +26,50 @@ export function Bugs() {
             </header>
             <main>
                 <Search />
-                <ListDisplay bugs={testBugs}/>
+                <CategoryList categories={categories} />
             </main>
         </>
     );
 }
 
+
+function CategoryList({ categories }: { categories: Category[] }) {
+    const categorySections: JSX.Element[] = [];
+
+    categories.forEach((category) => {
+        categorySections.push(
+            <CategorySection category={category} key={category.id} />
+        );
+    });
+
+    return <>{categorySections}</>;
+}
+
+function CategorySection({ category }: { category: Category }) {
+    const bugItems: JSX.Element[] = [];
+
+    category.bugs.forEach((bug) => {
+        bugItems.push(<BugItem bug={bug} key={bug.id} />);
+    });
+
+    return (
+        <section className="category">
+            <h3>{category.name}</h3>
+            <ul className="category__list">{bugItems}</ul>
+        </section>
+    );
+}
+
+function BugItem({ bug }: { bug: Bug }) {
+    return (
+        <li>
+            <span className="bug_name">{bug.name}</span>
+            {bug.scientificName && (
+                <em className="bug_sci"> ({bug.scientificName})</em>
+            )}
+        </li>
+    );
+}
 
 function Search() {
 
@@ -44,34 +84,7 @@ function Search() {
     );
 }
 
-function ListDisplay({bugs}: {bugs: Bug[]}) {
-    const bugListItems: JSX.Element[] = [];
 
-    bugs.forEach((bug) => {
-        bugListItems.push(<ListBugItem
-                name={bug.name}
-                key={bug.id}
-            />
-        );
-    })
-
-    return(
-        <section className="top-bugs">
-            <h2>Today's Bugs:</h2>
-            <ol className="top-bugs__list">
-                {bugListItems}
-            </ol>
-        </section>
-    )
-}
-
-function ListBugItem({name}: {name: string}) {
-    return (
-        <li>
-            <a href="#">{name}</a>
-        </li>
-    )
-}
 
 
 export default Bugs;
