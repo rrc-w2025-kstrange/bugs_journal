@@ -1,0 +1,16 @@
+.site-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+}
+
+.site-header__logo {
+    height: 60px;
+    width: auto;
+}
+
+.site-header__text {
+    display: flex;
+    flex-direction: column;
+}
