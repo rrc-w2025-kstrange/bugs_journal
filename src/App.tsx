@@ -1,11 +1,13 @@
-import './App.css'
+import { Header } from "./components/common/header/Header";
+import { Bugs } from "./components/bugs/Bugs";
 
-function App() {
-  return (
-    <div>
-      <span>Hello World!</span>
-    </div>
-  )
+export function App() {
+    return (
+        <>
+            <Header />
+            <Bugs />
+        </>
+    );
 }
 
-export default App
+export default App;
