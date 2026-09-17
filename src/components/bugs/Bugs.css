@@ -1,5 +1,4 @@
-
-main {
+.bugs {
     max-width: 700px;
     margin: 0 auto;
     padding: 1rem 1.5rem 2rem;
@@ -28,13 +27,13 @@ main {
     margin-left: 0.5rem;
     border-radius: 6px;
     border: none;
-    background-color: #4c7a5e; 
+    background-color: #4c7a5e;
     color: #ffffff;
     cursor: pointer;
 }
 
 .search input[type="submit"]:hover {
-    background-color: #3d6249; 
+    background-color: #3d6249;
 }
 
 .category {
@@ -62,6 +61,6 @@ main {
 }
 
 .bug_sci {
-    color: #7c7263; 
+    color: #7c7263;
     margin-left: 0.3rem;
 }
