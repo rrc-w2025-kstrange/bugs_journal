@@ -1,14 +1,28 @@
-.site-header {
+.header {
     display: flex;
+    flex-direction: column;
     align-items: center;
-    gap: 1.5rem;
-    max-width: 800px;
-    margin: 0 auto;
+    gap: 0.5rem;
     padding: 2rem 1.5rem 1rem;
 }
 
-.site-header__logo {
+.header_logo {
     height: 60px;
     width: auto;
     border-radius: 8px;
+}
+
+.header_text {
+    text-align: center;
+}
+
+.header_text h1 {
+    font-size: 2.25rem;
+    color: #2f4f3f;
+}
+
+.header_text span {
+    display: block;
+    color: #6b6355;
+    margin-top: 0.25rem;
 }
