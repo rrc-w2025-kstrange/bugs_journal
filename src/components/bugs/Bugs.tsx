@@ -1,4 +1,5 @@
 import bugData from "../../data/bugs.json";
+import "./Bugs.css";
 
 export interface Bug {
     id: number;
