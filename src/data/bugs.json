@@ -1,0 +1,46 @@
+[
+    {
+        "id": 0,
+        "name": "Moths",
+        "bugs": [
+            { "id": 0, "name": "Luna Moth", "scientificName": "Actias luna" },
+            { "id": 1, "name": "Atlas Moth", "scientificName": "Attacus atlas" }
+        ]
+    },
+    {
+        "id": 1,
+        "name": "Ants",
+        "bugs": [
+            { "id": 2, "name": "Carpenter Ant", "scientificName": "Camponotus novaboracensis" }
+        ]
+    },
+    {
+        "id": 2,
+        "name": "Butterflies",
+        "bugs": [
+            { "id": 3, "name": "Blue Morpho Butterfly", "scientificName": "Morpho menelaus" }
+        ]
+    },
+    {
+        "id": 3,
+        "name": "Bees",
+        "bugs": [
+            { "id": 4, "name": "Chilean Bumblebee", "scientificName": "Bombus dahlbomii" }
+        ]
+    },
+    {
+        "id": 4,
+        "name": "Arachnids",
+        "bugs": [
+            { "id": 5, "name": "Chilean Rose Tarantula", "scientificName": "Grammostola rosea" }
+        ]
+    },
+    {
+        "id": 5,
+        "name": "Beetles",
+        "bugs": [
+            { "id": 6, "name": "Goliath Beetle", "scientificName": "Goliathus goliatus" },
+            { "id": 7, "name": "Jewel Beetle", "scientificName": "Chrysochroa fulgidissima" }
+        ]
+    }
+]
