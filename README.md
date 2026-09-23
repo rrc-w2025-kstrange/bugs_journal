@@ -2,7 +2,7 @@
 
 ## Team Name
 
-Group 6 AKA KyMiZa
+KyMiZa
 
 ## Team Members
 
