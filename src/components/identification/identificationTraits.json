@@ -1,0 +1,27 @@
+[
+    {
+      "id": 1,
+      "feature": "Colour",
+      "description": "Observe body and wing colours to narrow down possible species."
+    },
+    {
+      "id": 2,
+      "feature": "Wing Structure",
+      "description": "Look for transparent, patterned, large, or folded wings."
+    },
+    {
+      "id": 3,
+      "feature": "Body Shape",
+      "description": "Compare the insect's body size, segments, and proportions."
+    },
+    {
+      "id": 4,
+      "feature": "Antennae",
+      "description": "Different species have unique antennae lengths and shapes."
+    },
+    {
+      "id": 5,
+      "feature": "Habitat",
+      "description": "Consider where the insect was found, such as forests, gardens, or water."
+    }
+  ]
