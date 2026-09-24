@@ -3,23 +3,23 @@ Team Name
 KyMiZa
 
 Team Members
-Kyra Strange
-Zachary Stewart
-Michael Docentes
+* Kyra Strange
+* Zachary Stewart
+* Michael Docentes
 Project Description
 This project is a bugs journal where users can explore different bugs and keep track of what they find. It focuses on three main parts: finding bugs, collecting them, and identifying what species they are.
 
 The goal is to make it easier to document and understand bugs in a simple and organized way.
 
 User Stories
-As a user, I want to see different bug names, so I can learn what kinds of cool bugs exist.
+* As a user, I want to see different bug names, so I can learn what kinds of cool bugs exist.
 
-As a user, I want to record when I catch or observe bugs, so I can keep a log of my findings.
+* As a user, I want to record when I catch or observe bugs, so I can keep a log of my findings.
 
-As a user, I want to learn to identify the species of bugs I find, so I can learn more about them.
+* As a user, I want to learn to identify the species of bugs I find, so I can learn more about them.
 
-As a user, I want to be able to add a new bug to my collection so that I can keep track of my collection.
+* As a user, I want to be able to add a new bug to my collection so that I can keep track of my collection.
 
-As a user, I want to be able to remove a bug off my collection so my lists stays as accurate as possible.
+* As a user, I want to be able to remove a bug off my collection so my lists stays as accurate as possible.
 
-As a user, I want to be to be able to see the total number of bugs automatically update so that it always show how many bugs is in my collection.
+* As a user, I want to be to be able to see the total number of bugs automatically update so that it always show how many bugs is in my collection.
