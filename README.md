@@ -17,3 +17,9 @@ As a user, I want to see different bug names, so I can learn what kinds of cool 
 As a user, I want to record when I catch or observe bugs, so I can keep a log of my findings.
 
 As a user, I want to learn to identify the species of bugs I find, so I can learn more about them.
+
+As a user, I want to be able to add a new bug to my collection so that I can keep track of my collection.
+
+As a user, I want to be able to remove a bug off my collection so my lists stays as accurate as possible.
+
+As a user, I want to be to be able to see the total number of bugs automatically update so that it always show how many bugs is in my collection.
