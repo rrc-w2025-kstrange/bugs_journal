@@ -1,4 +1,4 @@
-import "../../app.css";
+import "../../App.css";
 import identificationTraits from "./identificationTraits.json";
 import IdentificationTrait from "./identificationTrait";
 
