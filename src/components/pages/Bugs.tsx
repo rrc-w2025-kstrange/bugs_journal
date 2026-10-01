@@ -1,8 +1,8 @@
 import { useState } from "react";
 import type { Bug } from "../../types/bug";
 import { bugData } from "../../data/bugData";
-import { AddBugForm } from "./AddBugForm";
-import { BugList } from "./BugList";
+import { AddBugForm } from "../common/add-bug-form/AddBugForm";
+import { BugList } from "../common/bug-list/BugList";
 import "./Bugs.css";
 
 /**
