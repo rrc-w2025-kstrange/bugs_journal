@@ -7,7 +7,7 @@ import Landing from "./components/pages/Landing";
 import { Bugs } from "./components/pages/Bugs";
 import Collection from "./components/pages/Collection";
 import Identification from "./components/pages/Identification";
-
+ 
 interface CollectedBug {
   id: number;
   userId: number;
