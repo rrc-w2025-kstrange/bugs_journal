@@ -18,6 +18,8 @@ interface CollectedBug {
 interface CollectionProps {
   collectedSpecimens: CollectedBug[];
   setCollectedSpecimens: React.Dispatch<React.SetStateAction<CollectedBug[]>>;
+  bugCount: number;
+  setBugCount: React.Dispatch<React.SetStateAction<number>>;
 }
 
 interface FormData {
@@ -27,7 +29,7 @@ interface FormData {
   habitat: string;
 }
 
-export default function Collection({ collectedSpecimens, setCollectedSpecimens }: CollectionProps) {
+export default function Collection({ collectedSpecimens, setCollectedSpecimens, bugCount, setBugCount }: CollectionProps) {
   
   // state for form inputs
   const [formData, setFormData] = useState<FormData>({
@@ -68,6 +70,8 @@ export default function Collection({ collectedSpecimens, setCollectedSpecimens }
       // Update the list
       setCollectedSpecimens([...collectedSpecimens, newBug]);
 
+      setBugCount((current) => current + 1);
+
       // clear form
       setFormData({ commonName: "", scientificName: "", order: "", habitat: "" });
     }
@@ -77,12 +81,15 @@ export default function Collection({ collectedSpecimens, setCollectedSpecimens }
   const handleDelete = (idToDelete: number) => {
     const updatedList = collectedSpecimens.filter((bug) => bug.id !== idToDelete);
     setCollectedSpecimens(updatedList);
+
+    setBugCount((current) => Math.max(0, current - 1));
   };
 
   return (
     <section className="collection">
       <h2>My Bug Collection</h2>
       <p>Total Bugs Collected: {collectedSpecimens.length}</p>
+      <p>Total Bugs Discovered: {bugCount}</p>
 
       <form onSubmit={handleSubmit}>
         <h3>Add a New Bug</h3>

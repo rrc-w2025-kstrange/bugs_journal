@@ -7,10 +7,12 @@ import { bugCategories } from "../../../data/bugCategories";
  */
 export function AddBugForm({
         bugs,
-        updateBugs
+        updateBugs,
+        setBugCount
     }: {
         bugs: Bug[],
-        updateBugs: React.Dispatch<React.SetStateAction<Bug[]>>
+        updateBugs: React.Dispatch<React.SetStateAction<Bug[]>>,
+        setBugCount: React.Dispatch<React.SetStateAction<number>>
     }) {
     const [nameValue, setNameValue] = useState<string>("");
     const [scientificNameValue, setScientificNameValue] = useState<string>("");
@@ -45,6 +47,8 @@ export function AddBugForm({
         };
 
         updateBugs(oldBugs => [...oldBugs, newBug]);
+
+        setBugCount(oldCount => oldCount + 1);
 
         setNameValue("");
         setScientificNameValue("");
