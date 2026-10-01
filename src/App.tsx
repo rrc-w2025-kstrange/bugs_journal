@@ -5,12 +5,33 @@ import { bugData } from "./data/bugData";
 import { Layout } from "./components/common/layout/Layout";
 import Landing from "./components/pages/Landing";
 import { Bugs } from "./components/pages/Bugs";
-
+import Collection from "./components/pages/Collection";
+ 
+interface CollectedBug {
+  id: number;
+  userId: number;
+  commonName: string;
+  scientificName: string;
+  order: string;
+  habitat: string;
+  dateCollected: string;
+}
+ 
 export function App() {
-    // Shared state, stored here so every page can read and update the same bugs.
-    // The list persists as the user moves between pages.
     const [bugs, updateBugs] = useState<Bug[]>(bugData);
-
+ 
+    const [collectedSpecimens, setCollectedSpecimens] = useState<CollectedBug[]>([
+        {
+            id: 1,
+            userId: 1,
+            commonName: "Placeholder Beetle",
+            scientificName: "Species placeholder",
+            order: "Coleoptera",
+            habitat: "Garden",
+            dateCollected: "2026-09-01",
+        },
+    ]);
+ 
     return (
         <Routes>
             <Route path="/" element={<Layout />}>
@@ -18,9 +39,15 @@ export function App() {
                 <Route path="bugs" element={
                     <Bugs bugs={bugs} updateBugs={updateBugs} />
                 } />
+                <Route path="collection" element={
+                    <Collection
+                        collectedSpecimens={collectedSpecimens}
+                        setCollectedSpecimens={setCollectedSpecimens}
+                    />
+                } />
             </Route>
         </Routes>
     );
 }
-
+ 
 export default App;
