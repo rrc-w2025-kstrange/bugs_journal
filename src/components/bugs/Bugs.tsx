@@ -15,8 +15,8 @@ export function Bugs() {
     return (
         <>
             <header>
-                <h1>Bug Scouting</h1>
-                <span>Add new sightings or remove old ones from the journal.</span>
+                <h1>Bugs List</h1>
+                <span>Add new bugs or remove old ones from the journal.</span>
             </header>
             <main>
                 <AddBugForm bugs={bugs} updateBugs={updateBugs} />
