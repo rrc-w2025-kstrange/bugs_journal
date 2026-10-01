@@ -1,0 +1,110 @@
+header {
+    text-align: center;
+    padding: 1.5rem;
+}
+
+header h1 {
+    color: #2f4f3f;
+}
+
+header span {
+    color: #6b6355;
+}
+
+main {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 1rem 1.5rem 2rem;
+}
+
+/* --- Add Bug Form --- */
+.add-bug-form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    justify-content: center;
+    margin-bottom: 2.5rem;
+}
+
+.add-bug-form h2 {
+    width: 100%;
+    text-align: center;
+    color: #2f4f3f;
+}
+
+.add-bug-form input[type="text"],
+.add-bug-form select {
+    padding: 0.5rem 0.75rem;
+    border-radius: 6px;
+    border: 1px solid #cfc3a8;
+    background-color: #ffffff;
+    color: #3f3a30;
+}
+
+.add-bug-form input[type="submit"] {
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    border: none;
+    background-color: #4c7a5e;
+    color: #ffffff;
+    cursor: pointer;
+}
+
+.add-bug-form input[type="submit"]:hover {
+    background-color: #3d6249;
+}
+
+/* --- Bug List --- */
+.category {
+    text-align: center;
+    margin-bottom: 2rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid #e2d8c3;
+}
+
+.category h3 {
+    color: #2f4f3f;
+}
+
+.category-list {
+    list-style: none;
+    padding: 0;
+}
+
+.bug-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.35rem 0;
+}
+
+.bug-name {
+    font-weight: 600;
+}
+
+.bug-sci {
+    color: #7c7263;
+}
+
+.bug-item button {
+    padding: 0.2rem 0.6rem;
+    border-radius: 6px;
+    border: 1px solid #c0392b;
+    background-color: #ffffff;
+    color: #c0392b;
+    cursor: pointer;
+}
+
+.bug-item button:hover {
+    background-color: #c0392b;
+    color: #ffffff;
+}
+
+.form-error {
+    width: 100%;
+    text-align: center;
+    color: #c0392b;
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+}
