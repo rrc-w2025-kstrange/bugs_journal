@@ -10,10 +10,14 @@ import "./Bugs.css";
  */
 export function Bugs({
         bugs,
-        updateBugs
+        updateBugs,
+        bugCount,
+        setBugCount
     }: {
         bugs: Bug[],
-        updateBugs: React.Dispatch<React.SetStateAction<Bug[]>>
+        updateBugs: React.Dispatch<React.SetStateAction<Bug[]>>,
+        bugCount: number,
+        setBugCount: React.Dispatch<React.SetStateAction<number>>
     }) {
     return (
         <>
@@ -22,8 +26,9 @@ export function Bugs({
                 <span>Add new bugs or remove old ones from the journal.</span>
             </header>
             <main>
-                <AddBugForm bugs={bugs} updateBugs={updateBugs} />
-                <BugList bugs={bugs} updateBugs={updateBugs} />
+                <p>Total Bugs Discovered: {bugCount}</p>
+                <AddBugForm bugs={bugs} updateBugs={updateBugs} setBugCount={setBugCount} />
+                <BugList bugs={bugs} updateBugs={updateBugs} setBugCount={setBugCount} />
             </main>
         </>
     );
