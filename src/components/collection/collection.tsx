@@ -62,7 +62,7 @@ export default function Collection({ collectedSpecimens, setCollectedSpecimens }
         id: Date.now(), 
         userId: 1,
         ...formData,
-        dateCollected: new Date().toISOString().split("T")[0], // <-- ADDED DATE
+        dateCollected: new Date().toISOString().split("T")[0],
       };
 
       // Update the list
