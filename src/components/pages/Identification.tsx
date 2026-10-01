@@ -1,5 +1,5 @@
 import "../../app.css";
-import identificationTraits from "./identificationTraits.json";
+import identificationTraits from "../../data/identificationTraits.json";
 
 export default function Identification() {
   return (

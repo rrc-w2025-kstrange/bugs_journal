@@ -1,17 +1,20 @@
-import { useState } from "react";
 import type { Bug } from "../../types/bug";
-import { bugData } from "../../data/bugData";
-import { AddBugForm } from "./AddBugForm";
-import { BugList } from "./BugList";
+import { AddBugForm } from "../common/add-bug-form/AddBugForm";
+import { BugList } from "../common/bug-list/BugList";
 import "./Bugs.css";
 
 /**
- * Feature Page 
+ * Feature Page
  * purpose: let an admin manage a list of exotic bugs, grouped under a fixed set of categories.
+ * the bugs and their setter are received as props from App.
  */
-export function Bugs() {
-    const [bugs, updateBugs] = useState<Bug[]>(bugData);
-
+export function Bugs({
+        bugs,
+        updateBugs
+    }: {
+        bugs: Bug[],
+        updateBugs: React.Dispatch<React.SetStateAction<Bug[]>>
+    }) {
     return (
         <>
             <header>

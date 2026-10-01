@@ -1,4 +1,4 @@
-import type { Bug } from "../../types/bug";
+import type { Bug } from "../../../types/bug";
 
 /**
  * Renders one single bug, with a button to remove it.

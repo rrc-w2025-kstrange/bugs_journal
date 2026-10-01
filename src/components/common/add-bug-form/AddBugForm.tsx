@@ -1,6 +1,6 @@
 import { useState } from "react";
-import type { Bug } from "../../types/bug";
-import { bugCategories } from "../../data/bugCategories";
+import type { Bug } from "../../../types/bug";
+import { bugCategories } from "../../../data/bugCategories";
 
 /**
  * Receives the current bug list and its setter as props.

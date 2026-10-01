@@ -1,6 +1,6 @@
-import type { Bug } from "../../types/bug";
-import { bugCategories } from "../../data/bugCategories";
-import { BugItem } from "./BugItem";
+import type { Bug } from "../../../types/bug";
+import { bugCategories } from "../../../data/bugCategories";
+import { BugItem } from "../bug-item/BugItem";
 
 /**
  * Component to add or remove a bug as an admin.
