@@ -38,12 +38,14 @@ export function App() {
             <Route path="/" element={<Layout />}>
                 <Route index element={<Landing />} />
                 <Route path="bugs" element={
-                    <Bugs bugs={bugs} updateBugs={updateBugs} />
+                    <Bugs bugs={bugs} updateBugs={updateBugs} bugCount={bugCount} setBugCount={setBugCount} />
                 } />
                 <Route path="collection" element={
                     <Collection
                         collectedSpecimens={collectedSpecimens}
                         setCollectedSpecimens={setCollectedSpecimens}
+                        bugCount={bugCount}
+                        setBugCount={setBugCount}
                     />
                 } />
                 <Route
