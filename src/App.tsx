@@ -6,7 +6,8 @@ import { Layout } from "./components/common/layout/Layout";
 import Landing from "./components/pages/Landing";
 import { Bugs } from "./components/pages/Bugs";
 import Collection from "./components/pages/Collection";
- 
+import Identification from "./components/pages/Identification";
+
 interface CollectedBug {
   id: number;
   userId: number;
@@ -19,7 +20,7 @@ interface CollectedBug {
  
 export function App() {
     const [bugs, updateBugs] = useState<Bug[]>(bugData);
- 
+    const [bugCount, setBugCount] = useState(0);
     const [collectedSpecimens, setCollectedSpecimens] = useState<CollectedBug[]>([
         {
             id: 1,
@@ -45,6 +46,15 @@ export function App() {
                         setCollectedSpecimens={setCollectedSpecimens}
                     />
                 } />
+                <Route
+                    path="identification"
+                    element={
+                        <Identification
+                            bugCount={bugCount}
+                            setBugCount={setBugCount}
+                        />
+                    }
+                />
             </Route>
         </Routes>
     );
