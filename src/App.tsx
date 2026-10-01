@@ -1,16 +1,18 @@
-import { Header } from "./components/common/header/Header";
+import { Routes, Route } from "react-router-dom";
+import { Layout } from "./components/common/layout/Layout";
 import { Bugs } from "./components/bugs/Bugs";
-import { Footer } from "./components/common/footer/Footer";
 
 export function App() {
     return (
-        <>
-            <Header />
-            <main>
-                <Bugs />
-            </main>
-            <Footer />
-        </>
+        <Routes>
+            <Route path="/" element={<Layout />}>
+        
+                <Route index element={<Bugs />} />
+                <Route path="bugs" element={<Bugs />} />
+                {/* <Route path="collection" element={<Collection />} />
+                    <Route path="identification" element={<Identification />} /> */}
+            </Route>
+        </Routes>
     );
 }
 
