@@ -66,3 +66,9 @@ button:hover {
     background-color: var(--mantins-lime);
     color: var(--chitin-black)
 }
+
+.logo {
+    height: 60px;
+    width: auto;
+    border-radius: 8px;
+}
