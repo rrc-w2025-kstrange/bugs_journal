@@ -1,6 +1,7 @@
 import { useState } from "react";
 import type { Bug } from "../../../types/bug";
 import { bugCategories } from "../../../data/bugCategories";
+import { bugService } from "../../../services/bugService";
 
 /**
  * Receives the current bug list and its setter as props.
@@ -25,7 +26,8 @@ export function AddBugForm({
 
         setErrorMessage("");
 
-        if (nameValue.trim().length < 3) {
+        const nameError = bugService.validateBugName(nameValue);
+        if (nameError) {
             setErrorMessage("Bug name must be at least 3 characters.");
             return;
         }
