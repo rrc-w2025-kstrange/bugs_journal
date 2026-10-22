@@ -28,9 +28,9 @@ export default function IdentificationForm({
   handleSubmit,
 }: IdentificationFormProps) {
   return (
-    <form onSubmit={handleSubmit}>
+    <form className="identification-form" onSubmit={handleSubmit}>
       <div>
-        <label htmlFor="bug-name">Submission Name</label>
+        <label htmlFor="bug-name">Name:</label>
 
         <input
           id="bug-name"
@@ -43,7 +43,7 @@ export default function IdentificationForm({
       </div>
 
       <div>
-        <label htmlFor="bug-photo">Bug Photo</label>
+        <label htmlFor="bug-photo">Photo:</label>
 
         <input
           id="bug-photo"
@@ -56,9 +56,7 @@ export default function IdentificationForm({
       </div>
 
       <div>
-        <label htmlFor="bug-identification">
-          What kind of bug do you think it is?
-        </label>
+        <label htmlFor="bug-identification">Identification:</label>
 
         <input
           id="bug-identification"
@@ -86,7 +84,7 @@ export default function IdentificationForm({
             }}
           />
 
-          I don't know what kind of bug this is
+          Request Identification Help
         </label>
       </div>
 

@@ -1,16 +1,14 @@
 import { useState } from "react";
-import type { Bug } from "../../../types/bug";
 import { bugCategories } from "../../../data/bugCategories";
+import type { NewBugDetails } from "../../../services/bugService";
 
 /**
  * Receives the current bug list and its setter as props.
  */
 export function AddBugForm({
-        bugs,
-        updateBugs
+        onAddBug
     }: {
-        bugs: Bug[],
-        updateBugs: React.Dispatch<React.SetStateAction<Bug[]>>
+        onAddBug: (details: NewBugDetails) => string | undefined
     }) {
     const [nameValue, setNameValue] = useState<string>("");
     const [scientificNameValue, setScientificNameValue] = useState<string>("");
@@ -23,28 +21,16 @@ export function AddBugForm({
 
         setErrorMessage("");
 
-        if (nameValue.trim().length < 3) {
-            setErrorMessage("Bug name must be at least 3 characters.");
-            return;
-        }
-
-        if (!bugCategories.includes(categoryValue)) {
-            setErrorMessage("Please select an existing category.");
-            return;
-        }
-
-        const newId = bugs.length > 0
-            ? Math.max(...bugs.map(b => b.id)) + 1
-            : 0;
-
-        const newBug: Bug = {
-            id: newId,
-            name: nameValue.trim(),
-            scientificName: scientificNameValue.trim() || undefined,
+        const error = onAddBug({
+            name: nameValue,
+            scientificName: scientificNameValue,
             category: categoryValue
-        };
+        });
 
-        updateBugs(oldBugs => [...oldBugs, newBug]);
+        if (error) {
+            setErrorMessage(error);
+            return;
+        }
 
         setNameValue("");
         setScientificNameValue("");

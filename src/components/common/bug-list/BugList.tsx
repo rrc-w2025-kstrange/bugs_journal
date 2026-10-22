@@ -9,14 +9,14 @@ import { BugItem } from "../bug-item/BugItem";
  */
 export function BugList({
         bugs,
-        updateBugs
+        onRemoveBug
     }: {
         bugs: Bug[],
-        updateBugs: React.Dispatch<React.SetStateAction<Bug[]>>
+        onRemoveBug: (id: number) => void
     }) {
     const handleRemoveClick = (bugToRemove: Bug): void => {
         // Keep every bug except the one that was clicked
-        updateBugs(oldBugs => oldBugs.filter(b => b.id !== bugToRemove.id));
+        onRemoveBug(bugToRemove.id);
     };
 
     return (
