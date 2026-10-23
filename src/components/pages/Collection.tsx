@@ -1,9 +1,10 @@
 import { useState } from "react";
 import { useFieldValue } from "../../hooks/useFieldValue";
+import { bugService } from "../../services/bugService";
 
 interface FormErrors {
-  commonName: string;
-  order: string;
+  commonName?: string;
+  order?: string;
 }
 
 interface CollectedBug {
@@ -39,11 +40,12 @@ export default function Collection({ collectedSpecimens, setCollectedSpecimens, 
     e.preventDefault();
 
     // validation logic
-    let newErrors: FormErrors = {} as FormErrors;
-    if (!commonNameField.value.trim()) newErrors.commonName = "Common name is required";
-    if (!orderField.value.trim()) newErrors.order = "Order is required";
-    
-    setErrors(newErrors);
+        const newErrors = bugService.validateCollectedBug({
+            commonName: commonNameField.value,
+            order: orderField.value
+        });
+        
+        setErrors(newErrors as FormErrors);
 
     // if no errors, add the bug
     if (Object.keys(newErrors).length === 0) {
@@ -81,7 +83,6 @@ export default function Collection({ collectedSpecimens, setCollectedSpecimens, 
   return (
     <section className="collection">
       <h2>My Bug Collection</h2>
-      <p>Total Bugs Collected: {collectedSpecimens.length}</p>
       <p>Total Bugs Discovered: {bugCount}</p>
 
       <form onSubmit={handleSubmit}>

@@ -2,6 +2,7 @@ import { useState } from "react";
 import type { Bug } from "../../../types/bug";
 import { bugCategories } from "../../../data/bugCategories";
 import { useFieldValue } from "../../../hooks/useFieldValue";
+import { bugService } from "../../../services/bugService";
 
 /**
  * Receives the current bug list and its setter as props.
@@ -26,30 +27,30 @@ export function AddBugForm({
 
         setErrorMessage("");
 
-        if (nameField.value.trim().length < 3) {
-            setErrorMessage("Bug name must be at least 3 characters.");
+        const nameError = bugService.validateBugName(nameField.value);
+        if (nameError) {
+            setErrorMessage(nameError);
             return;
         }
 
-        if (!bugCategories.includes(categoryField.value)) {
+        if (!bugService.isValidCategory(categoryField.value, bugCategories)) {
             setErrorMessage("Please select an existing category.");
             return;
         }
 
-        const newId = bugs.length > 0
-            ? Math.max(...bugs.map(b => b.id)) + 1
-            : 0;
-
-        const newBug: Bug = {
-            id: newId,
-            name: nameField.value.trim(),
-            scientificName: scientificNameField.value.trim() || undefined,
-            category: categoryField.value
-        };
+        const newId = bugService.getNextBugId(bugs);
+        
+        const newBug = bugService.buildNewBug (
+            newId,
+            nameField.value,
+            scientificNameField.value,
+            categoryField.value
+        );
+    
 
         updateBugs(oldBugs => [...oldBugs, newBug]);
 
-        setBugCount(oldCount => oldCount + 1);
+        setBugCount(oldCount => bugService.adjustCount(oldCount, 1));
 
         nameField.resetValue();
         scientificNameField.resetValue();
