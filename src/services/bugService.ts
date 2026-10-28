@@ -51,14 +51,14 @@ export const bugService = {
   },
 
   // Build collection object
-  buildCollectedBug(commonName: string, order: string, scientificName: string, habitat: string) {
+  buildCollectedBug(commonName: string, scientificName: string, order: string, habitat: string) {
     return {
       id: this.generateUniqueId(),
       userId: 1, // Temporary user ID, replace with actual user ID when available
-      commonName,
-      scientificName,
-      order,
-      habitat,
+      commonName: commonName,
+      scientificName: scientificName,
+      order: order,
+      habitat: habitat,
       dateCollected: this.getFormattedDate()
     };
   },
