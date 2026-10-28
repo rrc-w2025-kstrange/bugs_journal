@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { bugService } from "../../services/bugService";
 
 interface IdentificationFormProps {
   name: string;
@@ -95,18 +96,15 @@ export default function Identification({
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
-    const newSubmission: BugSubmission = {
-      id: Date.now(),
-      name,
-      identification: identification || undefined,
-      photo: photo ? URL.createObjectURL(photo) : undefined,
-      requestIdentification,
-      status: "pending",
-    };
+    const photoUrl = photo ? URL.createObjectURL(photo) : undefined;
+
+    // Use service to build submission (will handle ID and "pending" status)
+    const newSubmission = bugService.buildSubmission(name, identification, photoUrl, requestIdentification);
 
     setSubmissions((current) => [...current, newSubmission]);
 
-    setBugCount((current) => current + 1);
+    // Use service to update the bug count
+    setBugCount((current) => bugService.adjustCount(current, 1));
 
     setName("");
     setIdentification("");
@@ -115,11 +113,13 @@ export default function Identification({
   }
 
   function handleRemove(id: number) {
+    // Use service to remove
     setSubmissions((current) =>
-      current.filter((submission) => submission.id !== id)
+      bugService.removeById(current, id)
     );
 
-    setBugCount((current) => Math.max(0, current - 1));
+    // Use service to update count
+    setBugCount((current) => bugService.adjustCount(current, -1));
   }
 
   return (

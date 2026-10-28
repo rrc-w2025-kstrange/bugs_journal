@@ -48,5 +48,35 @@ export const bugService = {
   // This just formats the date to YYYY-MM-DD
   getFormattedDate(): string {
     return new Date().toISOString().split("T")[0];
+  },
+
+  // Build collection object
+  buildCollectedBug(commonName: string, order: string, scientificName: string, habitat: string) {
+    return {
+      id: this.generateUniqueId(),
+      userId: 1, // Temporary user ID, replace with actual user ID when available
+      commonName,
+      scientificName,
+      order,
+      habitat,
+      dateCollected: this.getFormattedDate()
+    };
+  },
+
+  // For identification object (which moves ID and "pending status out of the page")
+  buildSubmission(name: string, identification: string, photoUrl: string | undefined, requestIdentification: boolean) {
+    return {
+      id: this.generateUniqueId(),
+      name,
+      identification: identification || undefined,
+      photo: photoUrl,
+      requestIdentification,
+      status: "pending" as const,
+    };
+  },
+
+  // Shared removed function for all 3 pages
+  removeById<T extends { id: number }>(items: T[], idToRemove: number): T[] {
+    return items.filter(item => item.id !== idToRemove);  
   }
 };

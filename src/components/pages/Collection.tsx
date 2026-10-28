@@ -39,30 +39,29 @@ export default function Collection({ collectedSpecimens, setCollectedSpecimens, 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    // validation logic
-        const newErrors = bugService.validateCollectedBug({
-            commonName: commonNameField.value,
-            order: orderField.value
-        });
-        
-        setErrors(newErrors as FormErrors);
+    // validation logic (using service)
+    const newErrors = bugService.validateCollectedBug({
+        commonName: commonNameField.value,
+        order: orderField.value
+    });
+    
+    setErrors(newErrors as FormErrors);
 
     // if no errors, add the bug
     if (Object.keys(newErrors).length === 0) {
-      const newBug: CollectedBug = {
-        id: Date.now(), 
-        userId: 1,
-        commonName: commonNameField.value,
-        scientificName: scientificNameField.value,
-        order: orderField.value,
-        habitat: habitatField.value,
-        dateCollected: new Date().toISOString().split("T")[0],
-      };
+      // USE SERVICE TO BUILD BUG
+      const newBug: CollectedBug = bugService.buildCollectedBug(
+        commonNameField.value,
+        scientificNameField.value,
+        orderField.value,
+        habitatField.value
+      );
 
       // Update the list
       setCollectedSpecimens([...collectedSpecimens, newBug]);
 
-      setBugCount((current) => current + 1);
+      // USE SERVICE TO UPDATE COUNT
+      setBugCount((current) => bugService.adjustCount(current, 1));
 
       // clear form
       commonNameField.resetValue();
@@ -74,10 +73,12 @@ export default function Collection({ collectedSpecimens, setCollectedSpecimens, 
 
   // for deleting bug 
   const handleDelete = (idToDelete: number) => {
-    const updatedList = collectedSpecimens.filter((bug) => bug.id !== idToDelete);
+    // USE SERVICE TO REMOVE
+    const updatedList = bugService.removeById(collectedSpecimens, idToDelete);
     setCollectedSpecimens(updatedList);
 
-    setBugCount((current) => Math.max(0, current - 1));
+    // USE SERVICE TO UPDATE COUNT
+    setBugCount((current) => bugService.adjustCount(current, -1));
   };
 
   return (
