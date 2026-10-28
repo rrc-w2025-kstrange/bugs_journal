@@ -1,9 +1,10 @@
 import { useState } from "react";
 import { useFieldValue } from "../../hooks/useFieldValue";
+import { bugService } from "../../services/bugService";
 
 interface FormErrors {
-  commonName: string;
-  order: string;
+  commonName?: string;
+  order?: string;
 }
 
 interface CollectedBug {
@@ -38,29 +39,29 @@ export default function Collection({ collectedSpecimens, setCollectedSpecimens, 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    // validation logic
-    let newErrors: FormErrors = {} as FormErrors;
-    if (!commonNameField.value.trim()) newErrors.commonName = "Common name is required";
-    if (!orderField.value.trim()) newErrors.order = "Order is required";
+    // validation logic (using service)
+    const newErrors = bugService.validateCollectedBug({
+        commonName: commonNameField.value,
+        order: orderField.value
+    });
     
-    setErrors(newErrors);
+    setErrors(newErrors as FormErrors);
 
     // if no errors, add the bug
     if (Object.keys(newErrors).length === 0) {
-      const newBug: CollectedBug = {
-        id: Date.now(), 
-        userId: 1,
-        commonName: commonNameField.value,
-        scientificName: scientificNameField.value,
-        order: orderField.value,
-        habitat: habitatField.value,
-        dateCollected: new Date().toISOString().split("T")[0],
-      };
+      // USE SERVICE TO BUILD BUG
+      const newBug: CollectedBug = bugService.buildCollectedBug(
+        commonNameField.value,
+        scientificNameField.value,
+        orderField.value,
+        habitatField.value
+      );
 
       // Update the list
       setCollectedSpecimens([...collectedSpecimens, newBug]);
 
-      setBugCount((current) => current + 1);
+      // USE SERVICE TO UPDATE COUNT
+      setBugCount((current) => bugService.adjustCount(current, 1));
 
       // clear form
       commonNameField.resetValue();
@@ -72,16 +73,17 @@ export default function Collection({ collectedSpecimens, setCollectedSpecimens, 
 
   // for deleting bug 
   const handleDelete = (idToDelete: number) => {
-    const updatedList = collectedSpecimens.filter((bug) => bug.id !== idToDelete);
+    // USE SERVICE TO REMOVE
+    const updatedList = bugService.removeById(collectedSpecimens, idToDelete);
     setCollectedSpecimens(updatedList);
 
-    setBugCount((current) => Math.max(0, current - 1));
+    // USE SERVICE TO UPDATE COUNT
+    setBugCount((current) => bugService.adjustCount(current, -1));
   };
 
   return (
     <section className="collection">
       <h2>My Bug Collection</h2>
-      <p>Total Bugs Collected: {collectedSpecimens.length}</p>
       <p>Total Bugs Discovered: {bugCount}</p>
 
       <form onSubmit={handleSubmit}>

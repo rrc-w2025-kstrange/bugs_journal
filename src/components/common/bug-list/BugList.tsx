@@ -1,6 +1,7 @@
 import type { Bug } from "../../../types/bug";
 import { bugCategories } from "../../../data/bugCategories";
 import { BugItem } from "../bug-item/BugItem";
+import { bugService } from "../../../services/bugService";
 
 /**
  * Component to add or remove a bug as an admin.
@@ -18,8 +19,10 @@ export function BugList({
     }) {
     const handleRemoveClick = (bugToRemove: Bug): void => {
         // Keep every bug except the one that was clicked
-        updateBugs(oldBugs => oldBugs.filter(b => b.id !== bugToRemove.id));
-        setBugCount(oldCount => Math.max(0, oldCount - 1));
+        // uses the shared remove service
+        updateBugs(oldBugs => bugService.removeById(oldBugs, bugToRemove.id));
+        // uses the shared count service
+        setBugCount(oldCount => bugService.adjustCount(oldCount, -1));
     };
 
     return (
