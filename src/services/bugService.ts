@@ -34,6 +34,44 @@ export const bugService = {
     };
   },
 
+  // Gets all bugs from the repository
+  async getBugs(): Promise<Bug[]> {
+    return bugRepository.getAll();
+  },
+
+  // Checks the rules, then asks the repository to add the bug
+  async addBug(input: CreateBugInput): Promise<Bug> {
+    const nameError = this.validateBugName(input.name);
+    if (nameError) {
+      throw new Error(nameError);
+    }
+
+    if (!this.isValidCategory(input.category, bugCategories)) {
+      throw new Error("Please select an existing category.");
+    }
+
+    const bugInput = this.buildNewBug(
+      input.name,
+      input.scientificName ?? "",
+      input.category
+    );
+
+    return bugRepository.add(bugInput);
+  },
+
+  // Checks the ID, then asks the repository to remove the bug
+  async removeBug(id: number): Promise<void> {
+    if (!Number.isInteger(id) || id < 0) {
+      throw new Error("Invalid bug ID.");
+    }
+
+    const removed = await bugRepository.remove(id);
+
+    if (!removed) {
+      throw new Error("Bug not found.");
+    }
+  },
+
   // Validates the form in collection page
   validateCollectedBug(data: { commonName: string; order: string }): Record<string, string> {
     const errors: Record<string, string> = {};
