@@ -1,4 +1,6 @@
-import type { Bug } from "../../types/bug";
+import type { CreateBugInput } from "../../types/bug";
+import { useBugs } from "../../hooks/useBugs";
+import { bugService } from "../../services/bugService";
 import { AddBugForm } from "../common/add-bug-form/AddBugForm";
 import { BugList } from "../common/bug-list/BugList";
 import "./Bugs.css";
@@ -6,19 +8,37 @@ import "./Bugs.css";
 /**
  * Feature Page
  * purpose: let an admin manage a list of exotic bugs, grouped under a fixed set of categories.
- * the bugs and their setter are received as props from App.
+ * The bugs come from the useBugs hook, which asks bugService, which asks
+ * bugRepository. This replaces passing the bugs down from App as props.
+ * The count is still received from App because the other pages share it.
  */
 export function Bugs({
-        bugs,
-        updateBugs,
         bugCount,
         setBugCount
     }: {
-        bugs: Bug[],
-        updateBugs: React.Dispatch<React.SetStateAction<Bug[]>>,
         bugCount: number,
         setBugCount: React.Dispatch<React.SetStateAction<number>>
     }) {
+    const { bugs, loading, error, addBug, removeBug } = useBugs();
+
+    async function handleAdd(input: CreateBugInput): Promise<boolean> {
+        const added = await addBug(input);
+
+        if (added) {
+            setBugCount(oldCount => bugService.adjustCount(oldCount, 1));
+        }
+
+        return added;
+    }
+
+    async function handleRemove(id: number): Promise<void> {
+        const removed = await removeBug(id);
+
+        if (removed) {
+            setBugCount(oldCount => bugService.adjustCount(oldCount, -1));
+        }
+    }
+
     return (
         <>
             <header>
@@ -27,8 +47,13 @@ export function Bugs({
             </header>
             <main>
                 <p>Total Bugs Discovered: {bugCount}</p>
-                <AddBugForm bugs={bugs} updateBugs={updateBugs} setBugCount={setBugCount} />
-                <BugList bugs={bugs} updateBugs={updateBugs} setBugCount={setBugCount} />
+                <AddBugForm onAdd={handleAdd} />
+                {error && <p className="form-error" role="alert">{error}</p>}
+                {loading ? (
+                    <p>Loading bugs...</p>
+                ) : (
+                    <BugList bugs={bugs} onRemove={handleRemove} />
+                )}
             </main>
         </>
     );
