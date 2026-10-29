@@ -8,5 +8,7 @@ export const bugData: Bug[] = [
     { id: 4, name: "Chilean Bumblebee", scientificName: "Bombus dahlbomii", category: "Bees" },
     { id: 5, name: "Chilean Rose Tarantula", scientificName: "Grammostola rosea", category: "Arachnids" },
     { id: 6, name: "Goliath Beetle", scientificName: "Goliathus goliatus", category: "Beetles" },
-    { id: 7, name: "Jewel Beetle", scientificName: "Chrysochroa fulgidissima", category: "Beetles" }
+    { id: 7, name: "Jewel Beetle", scientificName: "Chrysochroa fulgidissima", category: "Beetles" },
+    { id: 8, name: "Japanese Hornet", scientificName: "Vespa mandarinia japonica", category: "Wasps" },
+    { id: 9, name: "Japanese Rhinoceros Beetle", scientificName: "Allomyrina dichotoma", category: "Beetles" },
 ];

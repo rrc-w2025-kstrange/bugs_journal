@@ -1,3 +1,9 @@
+/** 
+ * Architechture component: 
+ * This component uses the useBugs hook for react state,
+ * the bugService for business logic (validation/counts),
+ * The bugRepository for test data access.
+*/
 import { useState } from "react";
 import { useFieldValue } from "../../hooks/useFieldValue";
 import { bugService } from "../../services/bugService";
