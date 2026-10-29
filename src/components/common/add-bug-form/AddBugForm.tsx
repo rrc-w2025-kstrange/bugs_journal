@@ -1,70 +1,42 @@
-import { useState } from "react";
-import type { Bug } from "../../../types/bug";
 import { bugCategories } from "../../../data/bugCategories";
 import { useFieldValue } from "../../../hooks/useFieldValue";
-import { bugService } from "../../../services/bugService";
+import type { CreateBugInput } from "../../../types/bug";
 
 /**
- * Receives the current bug list and its setter as props.
+ * Form to add a bug.
+ * It only collects what the user types (using the useFieldValue hook) and sends
+ * it to the onAdd method it receives. The rules and the saving are handled by
+ * the useBugs hook, bugService and bugRepository, so this form has no business
+ * logic or data access in it.
  */
 export function AddBugForm({
-        bugs,
-        updateBugs,
-        setBugCount
+        onAdd
     }: {
-        bugs: Bug[],
-        updateBugs: React.Dispatch<React.SetStateAction<Bug[]>>,
-        setBugCount: React.Dispatch<React.SetStateAction<number>>
+        onAdd: (input: CreateBugInput) => Promise<boolean>
     }) {
     const nameField = useFieldValue("");
     const scientificNameField = useFieldValue("");
     const categoryField = useFieldValue(bugCategories[0]);
 
-    const [errorMessage, setErrorMessage] = useState<string>("");
-
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
         e.preventDefault();
 
-        setErrorMessage("");
+        const added = await onAdd({
+            name: nameField.value,
+            scientificName: scientificNameField.value,
+            category: categoryField.value
+        });
 
-        const nameError = bugService.validateBugName(nameField.value);
-        if (nameError) {
-            setErrorMessage(nameError);
-            return;
+        if (added) {
+            nameField.resetValue();
+            scientificNameField.resetValue();
+            categoryField.resetValue();
         }
-
-        if (!bugService.isValidCategory(categoryField.value, bugCategories)) {
-            setErrorMessage("Please select an existing category.");
-            return;
-        }
-
-        const newId = bugService.getNextBugId(bugs);
-        
-        const newBug = bugService.buildNewBug (
-            newId,
-            nameField.value,
-            scientificNameField.value,
-            categoryField.value
-        );
-    
-
-        updateBugs(oldBugs => [...oldBugs, newBug]);
-
-        setBugCount(oldCount => bugService.adjustCount(oldCount, 1));
-
-        nameField.resetValue();
-        scientificNameField.resetValue();
-        categoryField.resetValue();
     };
 
     return (
         <form className="add-bug-form" onSubmit={handleSubmit}>
             <h2>Add a Bug</h2>
-
-            {/* Only renders when there's an actual message to show. */}
-            {errorMessage && (
-                <p className="form-error">{errorMessage}</p>
-            )}
 
             <input
                 type="text"
