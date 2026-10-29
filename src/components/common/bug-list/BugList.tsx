@@ -1,6 +1,8 @@
 import type { Bug } from "../../../types/bug";
 import { bugCategories } from "../../../data/bugCategories";
 import { BugItem } from "../bug-item/BugItem";
+import { bugService } from "../../../services/bugService";
+import { useBugCount } from "../../../hooks/useBugCount";
 
 /**
  * Component to add or remove a bug as an admin.
@@ -9,14 +11,18 @@ import { BugItem } from "../bug-item/BugItem";
  */
 export function BugList({
         bugs,
-        onRemoveBug
+        updateBugs
     }: {
         bugs: Bug[],
-        onRemoveBug: (id: number) => void
+        updateBugs: React.Dispatch<React.SetStateAction<Bug[]>>
     }) {
+    const { decrementBugCount } = useBugCount();
     const handleRemoveClick = (bugToRemove: Bug): void => {
         // Keep every bug except the one that was clicked
-        onRemoveBug(bugToRemove.id);
+        // uses the shared remove service
+        updateBugs(oldBugs => bugService.removeById(oldBugs, bugToRemove.id));
+        // uses the shared count service
+        decrementBugCount();
     };
 
     return (

@@ -1,8 +1,11 @@
 import { useState } from "react";
+import { useFieldValue } from "../../hooks/useFieldValue";
+import { bugService } from "../../services/bugService";
+import { useBugCount } from "../../hooks/useBugCount";
 
 interface FormErrors {
-  commonName: string;
-  order: string;
+  commonName?: string;
+  order?: string;
 }
 
 interface CollectedBug {
@@ -20,69 +23,68 @@ interface CollectionProps {
   setCollectedSpecimens: React.Dispatch<React.SetStateAction<CollectedBug[]>>;
 }
 
-interface FormData {
-  commonName: string;
-  scientificName: string;
-  order: string;
-  habitat: string;
-}
-
 export default function Collection({ collectedSpecimens, setCollectedSpecimens }: CollectionProps) {
+  const { bugCount, incrementBugCount, decrementBugCount } = useBugCount();
   
   // state for form inputs
-  const [formData, setFormData] = useState<FormData>({
-    commonName: "",
-    scientificName: "",
-    order: "",
-    habitat: ""
-  });
+  const commonNameField = useFieldValue("");
+  const scientificNameField = useFieldValue("");
+  const orderField = useFieldValue("");
+  const habitatField = useFieldValue("");
 
   // state for validating errors
   const [errors, setErrors] = useState<FormErrors>({} as FormErrors);
-
-  // handle typing in form
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
 
   // handle validation and adding
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    // validation logic
-    let newErrors: FormErrors = {} as FormErrors;
-    if (!formData.commonName.trim()) newErrors.commonName = "Common name is required";
-    if (!formData.order.trim()) newErrors.order = "Order is required";
+    // validation logic (using service)
+    const newErrors = bugService.validateCollectedBug({
+        commonName: commonNameField.value,
+        order: orderField.value
+    });
     
-    setErrors(newErrors);
+    setErrors(newErrors as FormErrors);
 
     // if no errors, add the bug
     if (Object.keys(newErrors).length === 0) {
-      const newBug: CollectedBug = {
-        id: Date.now(), 
-        userId: 1,
-        ...formData,
-        dateCollected: new Date().toISOString().split("T")[0],
-      };
+      // USE SERVICE TO BUILD BUG
+      const newBug: CollectedBug = bugService.buildCollectedBug(
+        commonNameField.value,
+        scientificNameField.value,
+        orderField.value,
+        habitatField.value
+      );
 
       // Update the list
       setCollectedSpecimens([...collectedSpecimens, newBug]);
 
+      // USE SERVICE TO UPDATE COUNT
+      incrementBugCount();
+
       // clear form
-      setFormData({ commonName: "", scientificName: "", order: "", habitat: "" });
+      commonNameField.resetValue();
+      scientificNameField.resetValue();
+      orderField.resetValue();
+      habitatField.resetValue();
     }
   };
 
   // for deleting bug 
   const handleDelete = (idToDelete: number) => {
-    const updatedList = collectedSpecimens.filter((bug) => bug.id !== idToDelete);
+    // USE SERVICE TO REMOVE
+    const updatedList = bugService.removeById(collectedSpecimens, idToDelete);
     setCollectedSpecimens(updatedList);
+
+    // USE SERVICE TO UPDATE COUNT
+    decrementBugCount();
   };
 
   return (
     <section className="collection">
       <h2>My Bug Collection</h2>
-      <p>Total Bugs Collected: {collectedSpecimens.length}</p>
+      <p>Total Bugs Discovered: {bugCount}</p>
 
       <form onSubmit={handleSubmit}>
         <h3>Add a New Bug</h3>
@@ -91,8 +93,8 @@ export default function Collection({ collectedSpecimens, setCollectedSpecimens }
           <input 
             name="commonName" 
             placeholder="Common Name" 
-            value={formData.commonName} 
-            onChange={handleChange} 
+            value={commonNameField.value} 
+            onChange={e => commonNameField.setValue(e.target.value)} 
           />
           {errors.commonName && <span style={{ color: "red", fontSize: "12px" }}> {errors.commonName}</span>}
         </div>
@@ -102,8 +104,8 @@ export default function Collection({ collectedSpecimens, setCollectedSpecimens }
           <input 
             name="scientificName" 
             placeholder="Scientific Name" 
-            value={formData.scientificName} 
-            onChange={handleChange} 
+            value={scientificNameField.value} 
+            onChange={e => scientificNameField.setValue(e.target.value)} 
           />
         </div>
         <br />
@@ -112,8 +114,8 @@ export default function Collection({ collectedSpecimens, setCollectedSpecimens }
           <input 
             name="order" 
             placeholder="Order (e.g. Coleoptera)" 
-            value={formData.order} 
-            onChange={handleChange} 
+            value={orderField.value} 
+            onChange={e => orderField.setValue(e.target.value)} 
           />
           {errors.order && <span style={{ color: "red", fontSize: "12px" }}> {errors.order}</span>}
         </div>
@@ -123,8 +125,8 @@ export default function Collection({ collectedSpecimens, setCollectedSpecimens }
           <input 
             name="habitat" 
             placeholder="Habitat" 
-            value={formData.habitat} 
-            onChange={handleChange} 
+            value={habitatField.value} 
+            onChange={e => habitatField.setValue(e.target.value)} 
           />
         </div>
         <br />

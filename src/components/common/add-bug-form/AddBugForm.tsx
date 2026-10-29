@@ -1,18 +1,24 @@
 import { useState } from "react";
+import type { Bug } from "../../../types/bug";
 import { bugCategories } from "../../../data/bugCategories";
-import type { NewBugDetails } from "../../../services/bugService";
+import { useFieldValue } from "../../../hooks/useFieldValue";
+import { bugService } from "../../../services/bugService";
+import { useBugCount } from "../../../hooks/useBugCount";
 
 /**
  * Receives the current bug list and its setter as props.
  */
 export function AddBugForm({
-        onAddBug
+        bugs,
+        updateBugs
     }: {
-        onAddBug: (details: NewBugDetails) => string | undefined
+        bugs: Bug[],
+        updateBugs: React.Dispatch<React.SetStateAction<Bug[]>>
     }) {
-    const [nameValue, setNameValue] = useState<string>("");
-    const [scientificNameValue, setScientificNameValue] = useState<string>("");
-    const [categoryValue, setCategoryValue] = useState<string>(bugCategories[0]);
+    const { incrementBugCount } = useBugCount();
+    const nameField = useFieldValue("");
+    const scientificNameField = useFieldValue("");
+    const categoryField = useFieldValue(bugCategories[0]);
 
     const [errorMessage, setErrorMessage] = useState<string>("");
 
@@ -21,20 +27,34 @@ export function AddBugForm({
 
         setErrorMessage("");
 
-        const error = onAddBug({
-            name: nameValue,
-            scientificName: scientificNameValue,
-            category: categoryValue
-        });
-
-        if (error) {
-            setErrorMessage(error);
+        const nameError = bugService.validateBugName(nameField.value);
+        if (nameError) {
+            setErrorMessage(nameError);
             return;
         }
 
-        setNameValue("");
-        setScientificNameValue("");
-        setCategoryValue(bugCategories[0]);
+        if (!bugService.isValidCategory(categoryField.value, bugCategories)) {
+            setErrorMessage("Please select an existing category.");
+            return;
+        }
+
+        const newId = bugService.getNextBugId(bugs);
+        
+        const newBug = bugService.buildNewBug (
+            newId,
+            nameField.value,
+            scientificNameField.value,
+            categoryField.value
+        );
+    
+
+        updateBugs(oldBugs => [...oldBugs, newBug]);
+
+        incrementBugCount();
+
+        nameField.resetValue();
+        scientificNameField.resetValue();
+        categoryField.resetValue();
     };
 
     return (
@@ -50,22 +70,22 @@ export function AddBugForm({
                 type="text"
                 name="bug-name"
                 placeholder="Bug name..."
-                value={nameValue}
-                onChange={e => setNameValue(e.target.value)}
+                value={nameField.value}
+                onChange={e => nameField.setValue(e.target.value)}
             />
 
             <input
                 type="text"
                 name="bug-scientific-name"
                 placeholder="Scientific name (optional)..."
-                value={scientificNameValue}
-                onChange={e => setScientificNameValue(e.target.value)}
+                value={scientificNameField.value}
+                onChange={e => scientificNameField.setValue(e.target.value)}
             />
 
             <select
                 name="bug-category"
-                value={categoryValue}
-                onChange={e => setCategoryValue(e.target.value)}
+                value={categoryField.value}
+                onChange={e => categoryField.setValue(e.target.value)}
             >
                 {bugCategories.map(category => (
                     <option key={category} value={category}>

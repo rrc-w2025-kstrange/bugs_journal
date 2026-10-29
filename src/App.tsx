@@ -1,5 +1,8 @@
 import { useState } from "react";
 import { Routes, Route } from "react-router-dom";
+import type { Bug } from "./types/bug";
+import { bugData } from "./data/bugData";
+import { collectionData } from "./data/collectionData";
 import { Layout } from "./components/common/layout/Layout";
 import Landing from "./components/pages/Landing";
 import { Bugs } from "./components/pages/Bugs";
@@ -17,24 +20,17 @@ interface CollectedBug {
 }
  
 export function App() {
-    const [bugCount, setBugCount] = useState(0);
-    const [collectedSpecimens, setCollectedSpecimens] = useState<CollectedBug[]>([
-        {
-            id: 1,
-            userId: 1,
-            commonName: "Placeholder Beetle",
-            scientificName: "Species placeholder",
-            order: "Coleoptera",
-            habitat: "Garden",
-            dateCollected: "2026-09-01",
-        },
-    ]);
+    const [bugs, updateBugs] = useState<Bug[]>(bugData);
+    const [collectedSpecimens, setCollectedSpecimens] =
+        useState<CollectedBug[]>(collectionData);
  
     return (
         <Routes>
             <Route path="/" element={<Layout />}>
                 <Route index element={<Landing />} />
-                <Route path="bugs" element={<Bugs />} />
+                <Route path="bugs" element={
+                    <Bugs bugs={bugs} updateBugs={updateBugs} />
+                } />
                 <Route path="collection" element={
                     <Collection
                         collectedSpecimens={collectedSpecimens}
@@ -44,10 +40,7 @@ export function App() {
                 <Route
                     path="identification"
                     element={
-                        <Identification
-                            bugCount={bugCount}
-                            setBugCount={setBugCount}
-                        />
+                        <Identification />
                     }
                 />
             </Route>

@@ -1,6 +1,7 @@
+import type { Bug } from "../../types/bug";
 import { AddBugForm } from "../common/add-bug-form/AddBugForm";
 import { BugList } from "../common/bug-list/BugList";
-import { useBugs } from "../../hooks/useBugs";
+import { useBugCount } from "../../hooks/useBugCount";
 import "./Bugs.css";
 
 /**
@@ -8,9 +9,14 @@ import "./Bugs.css";
  * purpose: let an admin manage a list of exotic bugs, grouped under a fixed set of categories.
  * the bugs and their setter are received as props from App.
  */
-export function Bugs() {
-    const { bugs, addBug, removeBug } = useBugs();
-
+export function Bugs({
+        bugs,
+        updateBugs
+    }: {
+        bugs: Bug[],
+        updateBugs: React.Dispatch<React.SetStateAction<Bug[]>>
+    }) {
+    const { bugCount } = useBugCount();
     return (
         <>
             <header>
@@ -18,8 +24,9 @@ export function Bugs() {
                 <span>Add new bugs or remove old ones from the journal.</span>
             </header>
             <main>
-                <AddBugForm onAddBug={addBug} />
-                <BugList bugs={bugs} onRemoveBug={removeBug} />
+                <p>Total Bugs Discovered: {bugCount}</p>
+                <AddBugForm bugs={bugs} updateBugs={updateBugs} />
+                <BugList bugs={bugs} updateBugs={updateBugs} />
             </main>
         </>
     );

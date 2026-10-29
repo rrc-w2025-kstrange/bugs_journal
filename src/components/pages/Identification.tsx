@@ -1,5 +1,7 @@
 import React, { useState } from "react";
-import "./Identification.css";
+import { useSubmissions } from "../../hooks/useSubmissions";
+import type { CreateBugSubmissionInput } from "../../types/bugSubmission";
+import { useBugCount } from "../../hooks/useBugCount";
 
 interface IdentificationFormProps {
   name: string;
@@ -23,9 +25,9 @@ function IdentificationForm({
   handleSubmit,
 }: IdentificationFormProps) {
   return (
-    <form className="identification-form" onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit}>
       <label>
-        Name:
+        Name
         <input
           type="text"
           value={name}
@@ -35,7 +37,7 @@ function IdentificationForm({
       </label>
 
       <label>
-        Identification:
+        Identification
         <input
           type="text"
           value={identification}
@@ -45,7 +47,7 @@ function IdentificationForm({
       </label>
 
       <label>
-        Photo:
+        Photo
         <input
           type="file"
           accept="image/*"
@@ -59,7 +61,7 @@ function IdentificationForm({
           checked={requestIdentification}
           onChange={(event) => setRequestIdentification(event.target.checked)}
         />
-        Request Identification Help
+        Request identification help
       </label>
 
       <button type="submit">Submit</button>
@@ -67,142 +69,139 @@ function IdentificationForm({
   );
 }
 
-interface BugSubmission {
-  id: number;
-  name: string;
-  photo?: string;
-  identification?: string;
-  requestIdentification: boolean;
-  status: "pending" | "approved" | "disapproved";
-}
-
-interface IdentificationProps {
-  bugCount: number;
-  setBugCount: React.Dispatch<React.SetStateAction<number>>;
-}
-
-export default function Identification({
-  bugCount,
-  setBugCount,
-}: IdentificationProps) {
+export default function Identification() {
+  /*
+   * This component uses useSubmissions so identification data flows through
+   * the submission service and repository instead of being stored in the page.
+   * The hook also provides loading, error, addSubmission, and removeSubmission.
+   */
+  const {
+    submissions,
+    loading,
+    error,
+    addSubmission,
+    removeSubmission,
+  } = useSubmissions();
+  const {
+    bugCount,
+    incrementBugCount,
+    decrementBugCount,
+  } = useBugCount();
   const [name, setName] = useState("");
   const [identification, setIdentification] = useState("");
   const [photo, setPhoto] = useState<File | null>(null);
   const [requestIdentification, setRequestIdentification] =
     useState(false);
 
-  const [submissions, setSubmissions] = useState<BugSubmission[]>([]);
-
-  function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+  async function handleSubmit(
+    event: React.FormEvent<HTMLFormElement>,
+  ) {
     event.preventDefault();
 
-    const newSubmission: BugSubmission = {
-      id: Date.now(),
+    const photoUrl = photo ? URL.createObjectURL(photo) : undefined;
+
+    const added = await addSubmission({
       name,
-      identification: identification || undefined,
-      photo: photo ? URL.createObjectURL(photo) : undefined,
+      identification,
+      photo: photoUrl,
       requestIdentification,
-      status: "pending",
-    };
+    } satisfies CreateBugSubmissionInput);
 
-    setSubmissions((current) => [...current, newSubmission]);
-
-    setBugCount((current) => current + 1);
-
-    setName("");
-    setIdentification("");
-    setPhoto(null);
-    setRequestIdentification(false);
+    if (added) {
+      incrementBugCount();
+      setName("");
+      setIdentification("");
+      setPhoto(null);
+      setRequestIdentification(false);
+    }
   }
 
-  function handleRemove(id: number) {
-    setSubmissions((current) =>
-      current.filter((submission) => submission.id !== id)
-    );
+  async function handleRemove(id: number) {
+    const removed = await removeSubmission(id);
 
-    setBugCount((current) => Math.max(0, current - 1));
+    if (removed) {
+      decrementBugCount();
+    }
   }
 
   return (
-    <>
-      <p className="bug-count">
+    <section className="identification">
+      <h2>Bug Identification</h2>
+
+      <p>
+        Upload a bug and either identify it yourself or request help
+        identifying it.
+      </p>
+
+      <p>
         <strong>Total Bugs Discovered:</strong> {bugCount}
       </p>
 
-      <section className="identification">
-        <h2>Bug Identification</h2>
+      <IdentificationForm
+        name={name}
+        setName={setName}
+        identification={identification}
+        setIdentification={setIdentification}
+        setPhoto={setPhoto}
+        requestIdentification={requestIdentification}
+        setRequestIdentification={setRequestIdentification}
+        handleSubmit={handleSubmit}
+      />
+
+      <section className="identification-preview">
+        <h2>Submission Preview</h2>
 
         <p>
-          Upload a bug and either identify it yourself or request help
-          identifying it.
+          <strong>Name:</strong>{" "}
+          {name || "Enter a submission name above"}
         </p>
 
-        <IdentificationForm
-          name={name}
-          setName={setName}
-          identification={identification}
-          setIdentification={setIdentification}
-          setPhoto={setPhoto}
-          requestIdentification={requestIdentification}
-          setRequestIdentification={setRequestIdentification}
-          handleSubmit={handleSubmit}
-        />
-
-        <section className="identification-preview">
-          <h2>Submission Preview</h2>
-
-          <p>
-            <strong>Name:</strong>{" "}
-            {name || "Enter a submission name above"}
-          </p>
-
-          <p>
-            <strong>Identification:</strong>{" "}
-            {requestIdentification
-              ? "Help requested"
-              : identification || "Not specified"}
-          </p>
-        </section>
-
-        <section className="identification-submissions">
-          <h2>Submitted Bugs</h2>
-
-          {submissions.length === 0 ? (
-            <p>No bug submissions yet.</p>
-          ) : (
-            submissions.map((submission) => (
-              <article key={submission.id} className="submission-item">
-                <p>
-                  <strong>Name:</strong> {submission.name}
-                </p>
-
-                {submission.photo && (
-                  <img
-                    src={submission.photo}
-                    alt={submission.name}
-                    className="submission-photo"
-                  />
-                )}
-
-                <p>
-                  <strong>Identification:</strong>{" "}
-                  {submission.requestIdentification
-                    ? "Help requested"
-                    : submission.identification || "Not specified"}
-                </p>
-
-                <p>
-                  <strong>Status:</strong> {submission.status}
-                </p>
-
-                <button type="button" onClick={() => handleRemove(submission.id)}>
-                  Remove
-                </button>
-              </article>
-            ))
-          )}
-        </section>
+        <p>
+          <strong>Identification:</strong>{" "}
+          {requestIdentification
+            ? "Help requested"
+            : identification || "Not specified"}
+        </p>
       </section>
-    </>
+
+      <section className="identification-submissions">
+        <h2>Submitted Bugs</h2>
+
+        {loading ? (
+          <p>Loading submissions...</p>
+        ) : submissions.length === 0 ? (
+          <p>No bug submissions yet.</p>
+        ) : (
+          submissions.map((submission) => (
+            <article key={submission.id} className="submission-item">
+              <p>
+                <strong>Name:</strong> {submission.name}
+              </p>
+
+              {submission.photo && (
+                <img src={submission.photo} alt={submission.name} />
+              )}
+
+              <p>
+                <strong>Identification:</strong>{" "}
+                {submission.requestIdentification
+                  ? "Help requested"
+                  : submission.identification || "Not specified"}
+              </p>
+
+              <p>
+                <strong>Status:</strong> {submission.status}
+              </p>
+
+              <button type="button" onClick={() => handleRemove(submission.id)}>
+                Remove
+              </button>
+            </article>
+          ))
+        )}
+
+        {error && <p role="alert">{error}</p>}
+      </section>
+    </section>
   );
 }
