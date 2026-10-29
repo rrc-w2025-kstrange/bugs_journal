@@ -1,6 +1,6 @@
-   import { bugRepository } from "../repositories/bugRepository";
-   import { bugCategories } from "../data/bugCategories";
-   import type { Bug, CreateBugInput } from "../types/bug";
+import { bugRepository } from "../repositories/bugRepository";
+import { bugCategories } from "../data/bugCategories";
+import type { Bug, CreateBugInput } from "../types/bug";
 
 export const bugService = {
   // Just validates the bug name length
