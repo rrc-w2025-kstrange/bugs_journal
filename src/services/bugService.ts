@@ -1,3 +1,7 @@
+   import { bugRepository } from "../repositories/bugRepository";
+   import { bugCategories } from "../data/bugCategories";
+   import type { Bug, CreateBugInput } from "../types/bug";
+
 export const bugService = {
   // Just validates the bug name length
   validateBugName(name: string): string | null {
@@ -11,12 +15,6 @@ export const bugService = {
     return Math.max(0, currentCount + adjustment);
   },
 
-  // calculates the next available ID for the new bug
-  getNextBugId(bugs: { id: number }[]): number {
-    if (bugs.length === 0) return 0;
-    return Math.max(...bugs.map((b) => b.id)) + 1;
-  },
-
   // Unique ID for collection and identification (it replaces Date.now())
   generateUniqueId(): number {
     return Date.now();
@@ -27,10 +25,9 @@ export const bugService = {
     return validCategories.includes(category);
   },
 
-  // New Bug Object
-  buildNewBug(id: number, name: string, scientificName: string, category: string) {
+  // New Bug Object (the repository gives it an ID)
+  buildNewBug(name: string, scientificName: string, category: string): CreateBugInput {
     return {
-        id: id,
         name: name.trim(),
         scientificName: scientificName.trim() || undefined,
         category: category
