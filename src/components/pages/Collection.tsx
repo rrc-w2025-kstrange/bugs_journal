@@ -4,7 +4,7 @@
  * the bugService for business logic (validation/counts),
  * The bugRepository for test data access.
 */
-import { useState } from "react";
+import React, { useState } from "react";
 import { useFieldValue } from "../../hooks/useFieldValue";
 import { useCollection } from "../../hooks/useCollection";
 import { bugService } from "../../services/bugService";
@@ -15,12 +15,7 @@ interface FormErrors {
   order?: string;
 }
 
-interface CollectionProps {
-  bugCount: number;
-  setBugCount: React.Dispatch<React.SetStateAction<number>>;
-}
-
-export default function Collection({ bugCount, setBugCount }: CollectionProps) {
+export default function Collection({ bugCount, setBugCount }: {bugCount: number, setBugCount: React.Dispatch<React.SetStateAction<number>>}) {
   
   // state for form inputs
   const commonNameField = useFieldValue("");

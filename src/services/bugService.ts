@@ -1,6 +1,8 @@
-   import { bugRepository } from "../repositories/bugRepository";
-   import { bugCategories } from "../data/bugCategories";
-   import type { Bug, CreateBugInput } from "../types/bug";
+import { bugRepository } from "../repositories/bugRepository";
+import { bugCategories } from "../data/bugCategories";
+import type { Bug, CreateBugInput } from "../types/bug";
+import { collectionRepository } from "../repositories/collectionRepository";
+import type { CollectedBug } from "../types/collectedBug";
 
 export const bugService = {
   // Just validates the bug name length
@@ -89,7 +91,7 @@ export const bugService = {
   buildCollectedBug(commonName: string, scientificName: string, order: string, habitat: string) {
     return {
       id: this.generateUniqueId(),
-      userId: 1, // Temporary user ID, replace with actual user ID when available
+      userId: 1, // Temporary user ID
       commonName: commonName,
       scientificName: scientificName,
       order: order,
@@ -98,7 +100,7 @@ export const bugService = {
     };
   },
 
-  // For identification object (which moves ID and "pending status out of the page")
+  // For identification object
   buildSubmission(name: string, identification: string, photoUrl: string | undefined, requestIdentification: boolean) {
     return {
       id: this.generateUniqueId(),
@@ -110,7 +112,20 @@ export const bugService = {
     };
   },
 
-  // Shared removed function for all 3 pages
+  // Collection repo wrapper
+  getCollectedBugs(): CollectedBug[] {
+    return collectionRepository.getCollectedBugs();
+  },
+
+  addCollectedBug(newBug: CollectedBug): CollectedBug[] {
+    return collectionRepository.addCollectedBug(newBug);
+  },
+  
+  removeCollectedBug(id: number): CollectedBug[] {
+    return collectionRepository.removeCollectedBug(id);
+  },
+
+  // Shared remove function for all 3 pages
   removeById<T extends { id: number }>(items: T[], idToRemove: number): T[] {
     return items.filter(item => item.id !== idToRemove);  
   }
