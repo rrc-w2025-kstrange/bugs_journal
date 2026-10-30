@@ -4,3 +4,9 @@ export type Bug = {
     scientificName?: string,
     category: string
 }
+
+export type CreateBugInput = {
+    name: string,
+    scientificName?: string,
+    category: string
+}

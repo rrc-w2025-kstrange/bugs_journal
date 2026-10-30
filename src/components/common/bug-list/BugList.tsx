@@ -1,28 +1,22 @@
 import type { Bug } from "../../../types/bug";
 import { bugCategories } from "../../../data/bugCategories";
 import { BugItem } from "../bug-item/BugItem";
-import { bugService } from "../../../services/bugService";
 
 /**
- * Component to add or remove a bug as an admin.
- * Receives the full bug list and groups it by the hardcoded categories
- * Removing a bug updates state immediately.
+ * Shows the bugs grouped by the hardcoded categories.
+ * It only displays the list it is given and tells the page which bug was
+ * clicked through onRemove. The removing itself is done by the useBugs hook,
+ * bugService and bugRepository.
  */
 export function BugList({
         bugs,
-        updateBugs,
-        setBugCount
+        onRemove
     }: {
         bugs: Bug[],
-        updateBugs: React.Dispatch<React.SetStateAction<Bug[]>>,
-        setBugCount: React.Dispatch<React.SetStateAction<number>>
+        onRemove: (id: number) => void
     }) {
     const handleRemoveClick = (bugToRemove: Bug): void => {
-        // Keep every bug except the one that was clicked
-        // uses the shared remove service
-        updateBugs(oldBugs => bugService.removeById(oldBugs, bugToRemove.id));
-        // uses the shared count service
-        setBugCount(oldCount => bugService.adjustCount(oldCount, -1));
+        onRemove(bugToRemove.id);
     };
 
     return (

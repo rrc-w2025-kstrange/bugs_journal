@@ -1,3 +1,7 @@
+   import { bugRepository } from "../repositories/bugRepository";
+   import { bugCategories } from "../data/bugCategories";
+   import type { Bug, CreateBugInput } from "../types/bug";
+
 export const bugService = {
   // Just validates the bug name length
   validateBugName(name: string): string | null {
@@ -11,12 +15,6 @@ export const bugService = {
     return Math.max(0, currentCount + adjustment);
   },
 
-  // calculates the next available ID for the new bug
-  getNextBugId(bugs: { id: number }[]): number {
-    if (bugs.length === 0) return 0;
-    return Math.max(...bugs.map((b) => b.id)) + 1;
-  },
-
   // Unique ID for collection and identification (it replaces Date.now())
   generateUniqueId(): number {
     return Date.now();
@@ -27,14 +25,51 @@ export const bugService = {
     return validCategories.includes(category);
   },
 
-  // New Bug Object
-  buildNewBug(id: number, name: string, scientificName: string, category: string) {
+  // New Bug Object (the repository gives it an ID)
+  buildNewBug(name: string, scientificName: string, category: string): CreateBugInput {
     return {
-        id: id,
         name: name.trim(),
         scientificName: scientificName.trim() || undefined,
         category: category
     };
+  },
+
+  // Gets all bugs from the repository
+  async getBugs(): Promise<Bug[]> {
+    return bugRepository.getAll();
+  },
+
+  // Checks the rules, then asks the repository to add the bug
+  async addBug(input: CreateBugInput): Promise<Bug> {
+    const nameError = this.validateBugName(input.name);
+    if (nameError) {
+      throw new Error(nameError);
+    }
+
+    if (!this.isValidCategory(input.category, bugCategories)) {
+      throw new Error("Please select an existing category.");
+    }
+
+    const bugInput = this.buildNewBug(
+      input.name,
+      input.scientificName ?? "",
+      input.category
+    );
+
+    return bugRepository.add(bugInput);
+  },
+
+  // Checks the ID, then asks the repository to remove the bug
+  async removeBug(id: number): Promise<void> {
+    if (!Number.isInteger(id) || id < 0) {
+      throw new Error("Invalid bug ID.");
+    }
+
+    const removed = await bugRepository.remove(id);
+
+    if (!removed) {
+      throw new Error("Bug not found.");
+    }
   },
 
   // Validates the form in collection page
