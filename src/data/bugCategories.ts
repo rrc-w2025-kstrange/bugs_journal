@@ -5,5 +5,4 @@ export const bugCategories: string[] = [
     "Bees",
     "Arachnids",
     "Beetles",
-    "Wasps"
 ];
