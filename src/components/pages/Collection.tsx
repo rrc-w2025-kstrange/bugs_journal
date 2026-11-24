@@ -1,30 +1,21 @@
-import { useState } from "react";
+/** 
+ * Architechture component: 
+ * This component uses the useBugs hook for react state,
+ * the bugService for business logic (validation/counts),
+ * The bugRepository for test data access.
+*/
+import React, { useState } from "react";
 import { useFieldValue } from "../../hooks/useFieldValue";
+import { useCollection } from "../../hooks/useCollection";
 import { bugService } from "../../services/bugService";
+import type { CollectedBug } from "../../types/collectedBug";
 
 interface FormErrors {
   commonName?: string;
   order?: string;
 }
 
-interface CollectedBug {
-  id: number;
-  userId: number;
-  commonName: string;
-  scientificName: string;
-  order: string;
-  habitat: string;
-  dateCollected: string;
-}
-
-interface CollectionProps {
-  collectedSpecimens: CollectedBug[];
-  setCollectedSpecimens: React.Dispatch<React.SetStateAction<CollectedBug[]>>;
-  bugCount: number;
-  setBugCount: React.Dispatch<React.SetStateAction<number>>;
-}
-
-export default function Collection({ collectedSpecimens, setCollectedSpecimens, bugCount, setBugCount }: CollectionProps) {
+export default function Collection({ bugCount, setBugCount }: {bugCount: number, setBugCount: React.Dispatch<React.SetStateAction<number>>}) {
   
   // state for form inputs
   const commonNameField = useFieldValue("");
@@ -34,6 +25,9 @@ export default function Collection({ collectedSpecimens, setCollectedSpecimens, 
 
   // state for validating errors
   const [errors, setErrors] = useState<FormErrors>({} as FormErrors);
+
+  // USE THE HOOK HERE
+  const { collectedBugs, addBug, removeBug } = useCollection();
 
   // handle validation and adding
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -57,8 +51,8 @@ export default function Collection({ collectedSpecimens, setCollectedSpecimens, 
         habitatField.value
       );
 
-      // Update the list
-      setCollectedSpecimens([...collectedSpecimens, newBug]);
+      // USE HOOK TO ADD BUG
+      addBug(newBug);
 
       // USE SERVICE TO UPDATE COUNT
       setBugCount((current) => bugService.adjustCount(current, 1));
@@ -73,9 +67,8 @@ export default function Collection({ collectedSpecimens, setCollectedSpecimens, 
 
   // for deleting bug 
   const handleDelete = (idToDelete: number) => {
-    // USE SERVICE TO REMOVE
-    const updatedList = bugService.removeById(collectedSpecimens, idToDelete);
-    setCollectedSpecimens(updatedList);
+    // USE HOOK TO REMOVE BUG
+    removeBug(idToDelete);
 
     // USE SERVICE TO UPDATE COUNT
     setBugCount((current) => bugService.adjustCount(current, -1));
@@ -136,7 +129,8 @@ export default function Collection({ collectedSpecimens, setCollectedSpecimens, 
 
       {/* List */}
       <ul>
-        {collectedSpecimens.map((specimen) => (
+        {/* NOTICE: we map over collectedBugs now, not collectedSpecimens! */}
+        {collectedBugs.map((specimen) => (
           <li key={specimen.id} style={{ marginBottom: "15px" }}>
             <strong>{specimen.commonName}</strong> ({specimen.scientificName})
             <br />
