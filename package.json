@@ -3,5 +3,11 @@
   "private": true,
   "workspaces": [
     "apps/*"
-  ]
+  ],
+  "devDependencies": {
+    "concurrently": "^10.0.7"
+  },
+  "scripts": {
+    "dev": "concurrently \"npm run dev -w @bugs/frontend\" \"npm run dev -w @bugs/backend\""
+  }
 }
