@@ -1,0 +1,7 @@
+{
+  "name": "bugs-journal",
+  "private": true,
+  "workspaces": [
+    "apps/*"
+  ]
+}
