@@ -7,3 +7,5 @@ export interface CollectedBug {
     habitat: string;
     dateCollected: string;
 }
+
+export type NewCollectedBug = Omit<CollectedBug, 'id'>;
