@@ -17,8 +17,9 @@ export const collectedBugController = {
     const deleted = await collectedBugService.remove(id);
 
     if (!deleted) {
-      return res.status(404).json({ error: 'Bug not found' });
+      res.status(404).json({ error: 'Collected bug not found' });
+      return;
     }
-    res.status(204).send();
+    res.sendStatus(204);
   }
 };

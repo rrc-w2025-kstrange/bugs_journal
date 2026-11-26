@@ -10,9 +10,6 @@ export const validateCollectedBugBody: RequestHandler = (req, res, next) => {
   const result = createCollectedBugSchema.safeParse(req.body);
 
   if (!result.success) {
-    // Using .issues for Zod v4 compatibility
-    console.log("ZOD VALIDATION FAILED:", result.error.issues); 
-    
     res.status(400).json({
       error: "Invalid collected bug",
       details: result.error.issues 
