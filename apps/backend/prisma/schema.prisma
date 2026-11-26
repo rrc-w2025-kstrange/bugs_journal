@@ -1,0 +1,22 @@
+generator client {
+  provider            = "prisma-client"
+  output              = "../generated/prisma"
+  importFileExtension = "ts"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ============ KYRA ============
+
+model Bug {
+  id             Int     @id @default(autoincrement())
+  name           String
+  scientificName String?
+  category       String
+}
+
+// ============ MICHAEL ============
+
+// ============ ZACH ============
