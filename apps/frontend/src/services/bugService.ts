@@ -2,7 +2,7 @@ import { bugRepository } from "../repositories/bugRepository";
 import { bugCategories } from "../data/bugCategories";
 import type { Bug, CreateBugInput } from "../types/bug";
 import { collectionRepository } from "../repositories/collectionRepository";
-import type { CollectedBug } from "../types/collectedBug";
+import type { CollectedBug, NewCollectedBug } from "../types/collectedBug";
 
 export const bugService = {
   // Just validates the bug name length
@@ -109,12 +109,12 @@ export const bugService = {
   },
 
   // Collection repo wrapper
-  async getCollectedBugs(): Promise<CollectedBug[]> {
-    return collectionRepository.getCollectedBugs();
+  getCollectedBugs: async (): Promise<CollectedBug[]> => {
+    return await collectionRepository.getCollectedBugs();
   },
 
-  async addCollectedBug(newBug: import("../types/collectedBug").NewCollectedBug): Promise<CollectedBug> {
-    return collectionRepository.addCollectedBug(newBug);
+  addCollectedBug: async(newBug: NewCollectedBug): Promise<CollectedBug> => {
+    return await collectionRepository.addCollectedBug(newBug);
   },
   
   async removeCollectedBug(id: number): Promise<void> {

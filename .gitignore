@@ -23,7 +23,6 @@ dist-ssr
 *.sln
 *.sw?
 
-<<<<<<< HEAD
 # Environment variables
 .env
 .env.local
@@ -31,4 +30,3 @@ dist-ssr
 # Local settings and generated files
 .env
 apps/backend/generated/
->>>>>>> develop

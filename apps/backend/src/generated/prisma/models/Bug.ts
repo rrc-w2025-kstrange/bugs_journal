@@ -208,6 +208,7 @@ export type BugWhereInput = {
   name?: Prisma.StringFilter<"Bug"> | string
   scientificName?: Prisma.StringNullableFilter<"Bug"> | string | null
   category?: Prisma.StringFilter<"Bug"> | string
+  CollectedBugs?: Prisma.CollectedBugListRelationFilter
 }
 
 export type BugOrderByWithRelationInput = {
@@ -215,6 +216,7 @@ export type BugOrderByWithRelationInput = {
   name?: Prisma.SortOrder
   scientificName?: Prisma.SortOrderInput | Prisma.SortOrder
   category?: Prisma.SortOrder
+  CollectedBugs?: Prisma.CollectedBugOrderByRelationAggregateInput
 }
 
 export type BugWhereUniqueInput = Prisma.AtLeast<{
@@ -225,6 +227,7 @@ export type BugWhereUniqueInput = Prisma.AtLeast<{
   name?: Prisma.StringFilter<"Bug"> | string
   scientificName?: Prisma.StringNullableFilter<"Bug"> | string | null
   category?: Prisma.StringFilter<"Bug"> | string
+  CollectedBugs?: Prisma.CollectedBugListRelationFilter
 }, "id">
 
 export type BugOrderByWithAggregationInput = {
@@ -253,6 +256,7 @@ export type BugCreateInput = {
   name: string
   scientificName?: string | null
   category: string
+  CollectedBugs?: Prisma.CollectedBugCreateNestedManyWithoutBugInput
 }
 
 export type BugUncheckedCreateInput = {
@@ -260,12 +264,14 @@ export type BugUncheckedCreateInput = {
   name: string
   scientificName?: string | null
   category: string
+  CollectedBugs?: Prisma.CollectedBugUncheckedCreateNestedManyWithoutBugInput
 }
 
 export type BugUpdateInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   scientificName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   category?: Prisma.StringFieldUpdateOperationsInput | string
+  CollectedBugs?: Prisma.CollectedBugUpdateManyWithoutBugNestedInput
 }
 
 export type BugUncheckedUpdateInput = {
@@ -273,6 +279,7 @@ export type BugUncheckedUpdateInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   scientificName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   category?: Prisma.StringFieldUpdateOperationsInput | string
+  CollectedBugs?: Prisma.CollectedBugUncheckedUpdateManyWithoutBugNestedInput
 }
 
 export type BugCreateManyInput = {
@@ -324,6 +331,11 @@ export type BugSumOrderByAggregateInput = {
   id?: Prisma.SortOrder
 }
 
+export type BugScalarRelationFilter = {
+  is?: Prisma.BugWhereInput
+  isNot?: Prisma.BugWhereInput
+}
+
 export type StringFieldUpdateOperationsInput = {
   set?: string
 }
@@ -340,6 +352,91 @@ export type IntFieldUpdateOperationsInput = {
   divide?: number
 }
 
+export type BugCreateNestedOneWithoutCollectedBugsInput = {
+  create?: Prisma.XOR<Prisma.BugCreateWithoutCollectedBugsInput, Prisma.BugUncheckedCreateWithoutCollectedBugsInput>
+  connectOrCreate?: Prisma.BugCreateOrConnectWithoutCollectedBugsInput
+  connect?: Prisma.BugWhereUniqueInput
+}
+
+export type BugUpdateOneRequiredWithoutCollectedBugsNestedInput = {
+  create?: Prisma.XOR<Prisma.BugCreateWithoutCollectedBugsInput, Prisma.BugUncheckedCreateWithoutCollectedBugsInput>
+  connectOrCreate?: Prisma.BugCreateOrConnectWithoutCollectedBugsInput
+  upsert?: Prisma.BugUpsertWithoutCollectedBugsInput
+  connect?: Prisma.BugWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.BugUpdateToOneWithWhereWithoutCollectedBugsInput, Prisma.BugUpdateWithoutCollectedBugsInput>, Prisma.BugUncheckedUpdateWithoutCollectedBugsInput>
+}
+
+export type BugCreateWithoutCollectedBugsInput = {
+  name: string
+  scientificName?: string | null
+  category: string
+}
+
+export type BugUncheckedCreateWithoutCollectedBugsInput = {
+  id?: number
+  name: string
+  scientificName?: string | null
+  category: string
+}
+
+export type BugCreateOrConnectWithoutCollectedBugsInput = {
+  where: Prisma.BugWhereUniqueInput
+  create: Prisma.XOR<Prisma.BugCreateWithoutCollectedBugsInput, Prisma.BugUncheckedCreateWithoutCollectedBugsInput>
+}
+
+export type BugUpsertWithoutCollectedBugsInput = {
+  update: Prisma.XOR<Prisma.BugUpdateWithoutCollectedBugsInput, Prisma.BugUncheckedUpdateWithoutCollectedBugsInput>
+  create: Prisma.XOR<Prisma.BugCreateWithoutCollectedBugsInput, Prisma.BugUncheckedCreateWithoutCollectedBugsInput>
+  where?: Prisma.BugWhereInput
+}
+
+export type BugUpdateToOneWithWhereWithoutCollectedBugsInput = {
+  where?: Prisma.BugWhereInput
+  data: Prisma.XOR<Prisma.BugUpdateWithoutCollectedBugsInput, Prisma.BugUncheckedUpdateWithoutCollectedBugsInput>
+}
+
+export type BugUpdateWithoutCollectedBugsInput = {
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  scientificName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  category?: Prisma.StringFieldUpdateOperationsInput | string
+}
+
+export type BugUncheckedUpdateWithoutCollectedBugsInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  scientificName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  category?: Prisma.StringFieldUpdateOperationsInput | string
+}
+
+
+/**
+ * Count Type BugCountOutputType
+ */
+
+export type BugCountOutputType = {
+  CollectedBugs: number
+}
+
+export type BugCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  CollectedBugs?: boolean | BugCountOutputTypeCountCollectedBugsArgs
+}
+
+/**
+ * BugCountOutputType without action
+ */
+export type BugCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the BugCountOutputType
+   */
+  select?: Prisma.BugCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * BugCountOutputType without action
+ */
+export type BugCountOutputTypeCountCollectedBugsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.CollectedBugWhereInput
+}
 
 
 export type BugSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -347,6 +444,8 @@ export type BugSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = ru
   name?: boolean
   scientificName?: boolean
   category?: boolean
+  CollectedBugs?: boolean | Prisma.Bug$CollectedBugsArgs<ExtArgs>
+  _count?: boolean | Prisma.BugCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["bug"]>
 
 export type BugSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -371,10 +470,18 @@ export type BugSelectScalar = {
 }
 
 export type BugOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "scientificName" | "category", ExtArgs["result"]["bug"]>
+export type BugInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  CollectedBugs?: boolean | Prisma.Bug$CollectedBugsArgs<ExtArgs>
+  _count?: boolean | Prisma.BugCountOutputTypeDefaultArgs<ExtArgs>
+}
+export type BugIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
+export type BugIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
 
 export type $BugPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Bug"
-  objects: {}
+  objects: {
+    CollectedBugs: Prisma.$CollectedBugPayload<ExtArgs>[]
+  }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
     name: string
@@ -774,6 +881,7 @@ readonly fields: BugFieldRefs;
  */
 export interface Prisma__BugClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
+  CollectedBugs<T extends Prisma.Bug$CollectedBugsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Bug$CollectedBugsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CollectedBugPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -824,6 +932,10 @@ export type BugFindUniqueArgs<ExtArgs extends runtime.Types.Extensions.InternalA
    */
   omit?: Prisma.BugOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.BugInclude<ExtArgs> | null
+  /**
    * Filter, which Bug to fetch.
    */
   where: Prisma.BugWhereUniqueInput
@@ -842,6 +954,10 @@ export type BugFindUniqueOrThrowArgs<ExtArgs extends runtime.Types.Extensions.In
    */
   omit?: Prisma.BugOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.BugInclude<ExtArgs> | null
+  /**
    * Filter, which Bug to fetch.
    */
   where: Prisma.BugWhereUniqueInput
@@ -859,6 +975,10 @@ export type BugFindFirstArgs<ExtArgs extends runtime.Types.Extensions.InternalAr
    * Omit specific fields from the Bug
    */
   omit?: Prisma.BugOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.BugInclude<ExtArgs> | null
   /**
    * Filter, which Bug to fetch.
    */
@@ -908,6 +1028,10 @@ export type BugFindFirstOrThrowArgs<ExtArgs extends runtime.Types.Extensions.Int
    */
   omit?: Prisma.BugOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.BugInclude<ExtArgs> | null
+  /**
    * Filter, which Bug to fetch.
    */
   where?: Prisma.BugWhereInput
@@ -955,6 +1079,10 @@ export type BugFindManyArgs<ExtArgs extends runtime.Types.Extensions.InternalArg
    * Omit specific fields from the Bug
    */
   omit?: Prisma.BugOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.BugInclude<ExtArgs> | null
   /**
    * Filter, which Bugs to fetch.
    */
@@ -1004,6 +1132,10 @@ export type BugCreateArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs 
    */
   omit?: Prisma.BugOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.BugInclude<ExtArgs> | null
+  /**
    * The data needed to create a Bug.
    */
   data: Prisma.XOR<Prisma.BugCreateInput, Prisma.BugUncheckedCreateInput>
@@ -1051,6 +1183,10 @@ export type BugUpdateArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs 
    * Omit specific fields from the Bug
    */
   omit?: Prisma.BugOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.BugInclude<ExtArgs> | null
   /**
    * The data needed to update a Bug.
    */
@@ -1118,6 +1254,10 @@ export type BugUpsertArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs 
    */
   omit?: Prisma.BugOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.BugInclude<ExtArgs> | null
+  /**
    * The filter to search for the Bug to update in case it exists.
    */
   where: Prisma.BugWhereUniqueInput
@@ -1144,6 +1284,10 @@ export type BugDeleteArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs 
    */
   omit?: Prisma.BugOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.BugInclude<ExtArgs> | null
+  /**
    * Filter which Bug to delete.
    */
   where: Prisma.BugWhereUniqueInput
@@ -1164,6 +1308,30 @@ export type BugDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.InternalA
 }
 
 /**
+ * Bug.CollectedBugs
+ */
+export type Bug$CollectedBugsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the CollectedBug
+   */
+  select?: Prisma.CollectedBugSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the CollectedBug
+   */
+  omit?: Prisma.CollectedBugOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CollectedBugInclude<ExtArgs> | null
+  where?: Prisma.CollectedBugWhereInput
+  orderBy?: Prisma.CollectedBugOrderByWithRelationInput | Prisma.CollectedBugOrderByWithRelationInput[]
+  cursor?: Prisma.CollectedBugWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.CollectedBugScalarFieldEnum | Prisma.CollectedBugScalarFieldEnum[]
+}
+
+/**
  * Bug without action
  */
 export type BugDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1175,4 +1343,8 @@ export type BugDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs
    * Omit specific fields from the Bug
    */
   omit?: Prisma.BugOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.BugInclude<ExtArgs> | null
 }

@@ -9,5 +9,6 @@
  * 🟢 You can import this file directly.
  */
 export type * from './models/Bug.ts'
+export type * from './models/User.ts'
 export type * from './models/CollectedBug.ts'
 export type * from './commonInputTypes.ts'

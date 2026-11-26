@@ -3,11 +3,7 @@ import { z } from "zod";
 
 const createCollectedBugSchema = z.object({
   userId: z.number().int().positive(),
-  commonName: z.string().trim().min(1, "Common name is required."),
-  scientificName: z.string().trim(),
-  order: z.string().trim().min(1, "Order is required."),
-  habitat: z.string().trim(),
-  dateCollected: z.string().datetime() 
+  bugId: z.number().int().positive()
 }).strict();
 
 export const validateCollectedBugBody: RequestHandler = (req, res, next) => {
@@ -15,7 +11,7 @@ export const validateCollectedBugBody: RequestHandler = (req, res, next) => {
 
   if (!result.success) {
     // Using .issues for Zod v4 compatibility
-    console.log("BACKEND VALIDATION FAILED:", result.error.issues); 
+    console.log("ZOD VALIDATION FAILED:", result.error.issues); 
     
     res.status(400).json({
       error: "Invalid collected bug",

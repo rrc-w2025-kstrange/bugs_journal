@@ -52,6 +52,7 @@ export const AnyNull = runtime.AnyNull
 
 export const ModelName = {
   Bug: 'Bug',
+  User: 'User',
   CollectedBug: 'CollectedBug'
 } as const
 
@@ -81,13 +82,18 @@ export const BugScalarFieldEnum = {
 export type BugScalarFieldEnum = (typeof BugScalarFieldEnum)[keyof typeof BugScalarFieldEnum]
 
 
+export const UserScalarFieldEnum = {
+  id: 'id',
+  name: 'name'
+} as const
+
+export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
+
+
 export const CollectedBugScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
-  commonName: 'commonName',
-  scientificName: 'scientificName',
-  order: 'order',
-  habitat: 'habitat',
+  bugId: 'bugId',
   dateCollected: 'dateCollected'
 } as const
 

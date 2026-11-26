@@ -1,24 +1,31 @@
 import { useState, useEffect } from "react";
 import type { CollectedBug, NewCollectedBug } from "../types/collectedBug";
-import { collectionRepository } from "../repositories/collectionRepository"; 
+import { bugService } from "../services/bugService"; 
 
 export function useCollection() {
     const [collectedBugs, setCollectedBugs] = useState<CollectedBug[]>([]);
     const [isLoading, setIsLoading] = useState(true);
 
+    const fetchBugs = async () => {
+        try {
+            // this will call the service layer instead of the repository
+            const data = await bugService.getCollectedBugs();
+            setCollectedBugs(data);
+        } catch (error) {
+            console.error(error);
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
     useEffect(() => {
-        // Uses the repository directly
-        collectionRepository.getCollectedBugs()
-            .then((data) => setCollectedBugs(data))
-            .catch((err) => console.error(err))
-            .finally(() => setIsLoading(false));
+        fetchBugs();
     }, []);
 
     const addBug = async (newBug: NewCollectedBug) => {
         try {
-            // Uses the repository directly
-            const savedBug = await collectionRepository.addCollectedBug(newBug);
-            setCollectedBugs(prev => [...prev, savedBug]);
+            await bugService.addCollectedBug(newBug);
+            await fetchBugs(); // Refresh the list after adding
         } catch (error) {
             console.error("Error adding bug:", error);
         }
@@ -26,8 +33,8 @@ export function useCollection() {
 
     const removeBug = async (id: number) => {
         try {
-            await collectionRepository.removeCollectedBug(id);
-            setCollectedBugs(prev => prev.filter(bug => bug.id !== id));
+            await bugService.removeCollectedBug(id);
+            await fetchBugs(); // Refresh the list after deletion
         } catch (error) {
             console.error("Error deleting bug:", error);
         }

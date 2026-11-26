@@ -23,6 +23,11 @@ export * from './enums.ts';
  */
 export type Bug = Prisma.BugModel
 /**
+ * Model User
+ * 
+ */
+export type User = Prisma.UserModel
+/**
  * Model CollectedBug
  * 
  */
