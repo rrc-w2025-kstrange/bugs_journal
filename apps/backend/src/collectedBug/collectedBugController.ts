@@ -20,10 +20,16 @@ export const collectedBugController = {
   },
   delete: async (req: Request, res: Response) => {
     try {
-      await collectedBugService.removeBug(Number(req.params.id));
+      const id = Number(req.params.id);
+      const deleted = await collectedBugService.removeBug(id);
+
+      // If Prisma does not find the bug, it throws an error, but just in case:
+      if (!deleted) {
+        return res.status(404).json({ error: 'Bug not found' });
+      }
       res.status(204).send();
     } catch (error) {
       res.status(400).json({ error: 'Failed to delete bug' });
     }
-  }
+  } 
 };

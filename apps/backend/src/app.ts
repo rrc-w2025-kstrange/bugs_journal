@@ -1,16 +1,48 @@
-import express from 'express';
-import cors from 'cors';
-import dotenv from 'dotenv';
+import "dotenv/config";
+import express from "express";
+import cors from "cors";
+import type { Request, Response, NextFunction } from "express";
+
+// ---- Route imports (edit only under your own name) ----
+
+// KYRA
+import { bugRoutes } from "./routes/bugRoutes.js";
+
+// MICHAEL
 import collectedBugRoutes from './collectedBug/collectedBugRoutes.js';
 
-dotenv.config();
+// ZACH
+
 const app = express();
 
-// T.4 CORS requirement (only accept requests from the frontend)
-app.use(cors({ origin: 'http://localhost:5173' }));
+const frontendUrl = process.env.FRONTEND_URL;
+
+if (!frontendUrl) {
+  throw new Error("FRONTEND_URL is required");
+}
+
+app.use(cors({ origin: frontendUrl }));
 app.use(express.json());
 
+// ---- Route mounting (edit only under your own name) ----
+
+// KYRA
+app.use("/api/bugs", bugRoutes);
+
+// MICHAEL
 app.use('/api/collected-bugs', collectedBugRoutes);
 
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`Backend running on http://localhost:${PORT}`));
+// ZACH
+
+// Central error handler
+app.use((
+  error: unknown,
+  _req: Request,
+  res: Response,
+  _next: NextFunction
+) => {
+  console.error(error);
+  res.status(500).json({ error: "Unexpected server error" });
+});
+
+export default app;

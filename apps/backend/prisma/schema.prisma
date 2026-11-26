@@ -1,11 +1,22 @@
 generator client {
-  provider = "prisma-client-js"
-  output = "../src/generated/prisma"
+  provider            = "prisma-client"
+  output              = "../src/generated/prisma"
+  importFileExtension = "ts"
 }
 
 datasource db {
   provider = "postgresql"
 }
+
+// ============ KYRA ============
+
+model Bug {
+  id             Int     @id @default(autoincrement())
+  name           String
+  scientificName String?
+  category       String
+}
+
 
 // --- MICHAEL'S TABLE ---
 model CollectedBug {
@@ -17,3 +28,5 @@ model CollectedBug {
   habitat        String
   dateCollected  DateTime
 }
+
+// ============ ZACH ============
