@@ -58,7 +58,7 @@ export const bugService = {
       input.category
     );
 
-    return bugRepository.create(bugInput);
+    return bugRepository.add(bugInput);
   },
 
   // Checks the ID, then asks the repository to remove the bug
@@ -67,7 +67,7 @@ export const bugService = {
       throw new Error("Invalid bug ID.");
     }
   
-    await bugRepository.delete(id);
+    await bugRepository.remove(id);
   },
 
   // Validates the form in collection page
