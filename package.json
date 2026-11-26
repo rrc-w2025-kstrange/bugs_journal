@@ -1,14 +1,13 @@
 {
   "name": "bugs-journal",
   "private": true,
-  "version": "0.0.0",
   "workspaces": [
     "apps/*"
   ],
-  "scripts": {
-    "dev": "concurrently \"npm run dev -w @bugs/frontend\" \"npm run dev -w @bugs/backend\""
-  },
   "devDependencies": {
     "concurrently": "^10.0.7"
+  },
+  "scripts": {
+    "dev": "concurrently \"npm run dev -w @bugs/frontend\" \"npm run dev -w @bugs/backend\""
   }
 }

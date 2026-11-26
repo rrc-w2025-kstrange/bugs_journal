@@ -1,4 +1,4 @@
-import { prisma } from "../db/prisma.js";
+import { prisma } from "../db/prisma";
 import type { Bug, CreateBugInput } from "../types/bug";
 
 // The database stores a missing scientific name as null.

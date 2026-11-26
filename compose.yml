@@ -1,7 +1,6 @@
 services:
-  db:
-    image: postgres:16
-    restart: always
+  postgres:
+    image: postgres:17
     environment:
       POSTGRES_USER: kymiza
       POSTGRES_PASSWORD: kymiza_dev_fullstack
@@ -9,7 +8,7 @@ services:
     ports:
       - "5433:5432"
     volumes:
-      - pgdata:/var/lib/postgresql/data
+      - kymiza_data:/var/lib/postgresql/data
 
 volumes:
-  pgdata:
+  kymiza_data:

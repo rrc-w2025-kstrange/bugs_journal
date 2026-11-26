@@ -1,28 +1,43 @@
 import type { Bug, CreateBugInput } from "../types/bug";
 
-const API_URL = `${import.meta.env.VITE_API_BASE_URL}/api/bugs`;
+const baseUrl = import.meta.env.VITE_API_BASE_URL;
+const endpoint = `${baseUrl}/api/bugs`;
+
+async function readJson<T>(response: Response): Promise<T> {
+    if (!response.ok) {
+        throw new Error(`API error: ${response.status}`);
+    }
+
+    return (await response.json()) as T;
+}
 
 export const bugRepository = {
-  getAll: async (): Promise<Bug[]> => {
-    const response = await fetch(API_URL);
-    if (!response.ok) throw new Error('Failed to fetch bugs');
-    return response.json();
-  },
+    async getAll(): Promise<Bug[]> {
+        const response = await fetch(endpoint);
+        return readJson<Bug[]>(response);
+    },
 
-  create: async (data: CreateBugInput): Promise<Bug> => {
-    const response = await fetch(API_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data),
-    });
-    if (!response.ok) throw new Error('Failed to create bug');
-    return response.json();
-  },
+    async add(input: CreateBugInput): Promise<Bug> {
+        const response = await fetch(endpoint, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(input),
+        });
 
-  delete: async (id: number): Promise<void> => {
-    const response = await fetch(`${API_URL}/${id}`, {
-      method: 'DELETE',
-    });
-    if (!response.ok) throw new Error('Failed to delete bug');
-  }
+        return readJson<Bug>(response);
+    },
+
+    async remove(id: number): Promise<boolean> {
+        const response = await fetch(`${endpoint}/${id}`, {
+            method: "DELETE",
+        });
+
+        if (response.status === 404) return false;
+
+        if (!response.ok) {
+            throw new Error(`API error: ${response.status}`);
+        }
+
+        return true;
+    },
 };
