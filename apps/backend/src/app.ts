@@ -1,5 +1,6 @@
 import "dotenv/config";
 import express from "express";
+import cors from "cors";
 import type { Request, Response, NextFunction } from "express";
 
 // ---- Route imports (edit only under your own name) ----
@@ -12,6 +13,13 @@ import type { Request, Response, NextFunction } from "express";
 
 const app = express();
 
+const frontendUrl = process.env.FRONTEND_URL;
+
+if (!frontendUrl) {
+  throw new Error("FRONTEND_URL is required");
+}
+
+app.use(cors({ origin: frontendUrl }));
 app.use(express.json());
 
 // ---- Route mounting (edit only under your own name) ----
