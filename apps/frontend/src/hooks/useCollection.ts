@@ -1,13 +1,13 @@
-<<<<<<< HEAD
 import { useState, useEffect } from "react";
 import type { CollectedBug, NewCollectedBug } from "../types/collectedBug";
-import { collectionRepository } from "../repositories/collectionRepository";
+import { collectionRepository } from "../repositories/collectionRepository"; 
 
 export function useCollection() {
     const [collectedBugs, setCollectedBugs] = useState<CollectedBug[]>([]);
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
+        // Uses the repository directly
         collectionRepository.getCollectedBugs()
             .then((data) => setCollectedBugs(data))
             .catch((err) => console.error(err))
@@ -16,6 +16,7 @@ export function useCollection() {
 
     const addBug = async (newBug: NewCollectedBug) => {
         try {
+            // Uses the repository directly
             const savedBug = await collectionRepository.addCollectedBug(newBug);
             setCollectedBugs(prev => [...prev, savedBug]);
         } catch (error) {
@@ -33,22 +34,4 @@ export function useCollection() {
     };
 
     return { collectedBugs, isLoading, addBug, removeBug };
-=======
-import { useState } from "react";
-import type { CollectedBug } from "../types/collectedBug";
-import { bugService } from "../services/bugService";
-
-export function useCollection() {
-    const [collectedBugs, setCollectedBugs] = useState<CollectedBug[]>(bugService.getCollectedBugs());
-
-    const addBug = (newBug: CollectedBug) => {
-        setCollectedBugs(bugService.addCollectedBug(newBug));
-    };
-
-    const removeBug = (id: number) => {
-        setCollectedBugs(bugService.removeCollectedBug(id));
-    };
-
-    return { collectedBugs, addBug, removeBug };
->>>>>>> develop
 }

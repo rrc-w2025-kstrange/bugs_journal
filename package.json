@@ -1,27 +1,14 @@
 {
   "name": "bugs-journal",
   "private": true,
-<<<<<<< HEAD
   "version": "0.0.0",
-  "workspaces": [
-    "apps/frontend",
-    "apps/backend"
-  ],
-  "devDependencies": {
-    "prisma": "^7.10.1"
-  },
-  "dependencies": {
-    "@prisma/client": "^7.10.1",
-    "dotenv": "^18.0.10"
-=======
   "workspaces": [
     "apps/*"
   ],
-  "devDependencies": {
-    "concurrently": "^10.0.7"
-  },
   "scripts": {
     "dev": "concurrently \"npm run dev -w @bugs/frontend\" \"npm run dev -w @bugs/backend\""
->>>>>>> develop
+  },
+  "devDependencies": {
+    "concurrently": "^10.0.7"
   }
 }

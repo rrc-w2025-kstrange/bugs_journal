@@ -58,7 +58,7 @@ export const bugService = {
       input.category
     );
 
-    return bugRepository.add(bugInput);
+    return bugRepository.create(bugInput);
   },
 
   // Checks the ID, then asks the repository to remove the bug
@@ -66,12 +66,8 @@ export const bugService = {
     if (!Number.isInteger(id) || id < 0) {
       throw new Error("Invalid bug ID.");
     }
-
-    const removed = await bugRepository.remove(id);
-
-    if (!removed) {
-      throw new Error("Bug not found.");
-    }
+  
+    await bugRepository.delete(id);
   },
 
   // Validates the form in collection page
@@ -113,15 +109,15 @@ export const bugService = {
   },
 
   // Collection repo wrapper
-  getCollectedBugs(): CollectedBug[] {
+  async getCollectedBugs(): Promise<CollectedBug[]> {
     return collectionRepository.getCollectedBugs();
   },
 
-  addCollectedBug(newBug: CollectedBug): CollectedBug[] {
+  async addCollectedBug(newBug: import("../types/collectedBug").NewCollectedBug): Promise<CollectedBug> {
     return collectionRepository.addCollectedBug(newBug);
   },
   
-  removeCollectedBug(id: number): CollectedBug[] {
+  async removeCollectedBug(id: number): Promise<void> {
     return collectionRepository.removeCollectedBug(id);
   },
 

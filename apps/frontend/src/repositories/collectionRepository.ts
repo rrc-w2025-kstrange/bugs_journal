@@ -1,7 +1,6 @@
-<<<<<<< HEAD
 import type { CollectedBug, NewCollectedBug } from "../types/collectedBug";
 
-const API_URL = 'http://localhost:5000/api/collected-bugs';
+const API_URL = `${import.meta.env.VITE_API_BASE_URL}/api/collected-bugs`;
 
 export const collectionRepository = {
   getCollectedBugs: async (): Promise<CollectedBug[]> => {
@@ -25,25 +24,5 @@ export const collectionRepository = {
       method: 'DELETE',
     });
     if (!response.ok) throw new Error('Failed to delete');
-=======
-import type { CollectedBug } from "../types/collectedBug";
-import { collectedBugData } from "../data/collectedBugData";
-
-let collectedBugs: CollectedBug[] = collectedBugData.map((bug) => ({ ...bug }));
-
-export const collectionRepository = {
-  getCollectedBugs: (): CollectedBug[] => {
-    return collectedBugs; 
-  },
-  addCollectedBug: (newBug: CollectedBug): CollectedBug[] => {
-    // This updates the memory bank with the new bug
-    collectedBugs = [...collectedBugs, newBug]; 
-    return collectedBugs;
-  },
-  removeCollectedBug: (id: number): CollectedBug[] => {
-    // This updates the memory bank by removing the bug
-    collectedBugs = collectedBugs.filter((bug) => bug.id !== id);
-    return collectedBugs;
->>>>>>> develop
   }
 };
