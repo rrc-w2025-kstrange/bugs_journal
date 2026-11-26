@@ -26,7 +26,7 @@ dist-ssr
 # Environment variables
 .env
 .env.local
-=======
+
 # Local settings and generated files
 .env
 apps/backend/generated/
