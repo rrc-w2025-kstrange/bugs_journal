@@ -7,6 +7,8 @@ import type { Request, Response, NextFunction } from "express";
 
 // KYRA
 
+import { bugRoutes } from "./routes/bugRoutes";
+
 // MICHAEL
 
 // ZACH
@@ -25,6 +27,8 @@ app.use(express.json());
 // ---- Route mounting (edit only under your own name) ----
 
 // KYRA
+
+app.use("/api/bugs", bugRoutes);
 
 // MICHAEL
 
