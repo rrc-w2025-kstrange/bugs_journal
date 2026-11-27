@@ -2,7 +2,7 @@ import { bugRepository } from "../repositories/bugRepository";
 import { bugCategories } from "../data/bugCategories";
 import type { Bug, CreateBugInput } from "../types/bug";
 import { collectionRepository } from "../repositories/collectionRepository";
-import type { CollectedBug } from "../types/collectedBug";
+import type { CollectedBug, NewCollectedBug } from "../types/collectedBug";
 
 export const bugService = {
   // Just validates the bug name length
@@ -66,12 +66,8 @@ export const bugService = {
     if (!Number.isInteger(id) || id < 0) {
       throw new Error("Invalid bug ID.");
     }
-
-    const removed = await bugRepository.remove(id);
-
-    if (!removed) {
-      throw new Error("Bug not found.");
-    }
+  
+    await bugRepository.remove(id);
   },
 
   // Validates the form in collection page
@@ -113,15 +109,15 @@ export const bugService = {
   },
 
   // Collection repo wrapper
-  getCollectedBugs(): CollectedBug[] {
-    return collectionRepository.getCollectedBugs();
+  getCollectedBugs: async (): Promise<CollectedBug[]> => {
+    return await collectionRepository.getCollectedBugs();
   },
 
-  addCollectedBug(newBug: CollectedBug): CollectedBug[] {
-    return collectionRepository.addCollectedBug(newBug);
+  addCollectedBug: async(newBug: NewCollectedBug): Promise<CollectedBug> => {
+    return await collectionRepository.addCollectedBug(newBug);
   },
   
-  removeCollectedBug(id: number): CollectedBug[] {
+  async removeCollectedBug(id: number): Promise<void> {
     return collectionRepository.removeCollectedBug(id);
   },
 

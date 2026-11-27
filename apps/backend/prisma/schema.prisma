@@ -15,8 +15,27 @@ model Bug {
   name           String
   scientificName String?
   category       String
+  CollectedBugs  CollectedBug[]
 }
 
-// ============ MICHAEL ============
+
+// --- MICHAEL'S TABLE ---
+model User {
+  id             Int      @id @default(autoincrement())
+  name           String
+  CollectedBugs  CollectedBug[]
+}
+
+model CollectedBug {
+  id             Int      @id @default(autoincrement())
+  userId         Int
+  bugId          Int
+  dateCollected DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id])
+  bug  Bug  @relation(fields: [bugId], references: [id])
+
+  @@unique([userId, bugId])
+}
 
 // ============ ZACH ============

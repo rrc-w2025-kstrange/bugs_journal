@@ -19,8 +19,6 @@ export function App() {
                 } />
                 <Route path="collection" element={
                     <Collection
-                        bugCount={bugCount}
-                        setBugCount={setBugCount}
                     />
                 } />
                 <Route

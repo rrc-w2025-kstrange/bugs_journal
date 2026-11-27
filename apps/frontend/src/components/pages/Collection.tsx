@@ -1,145 +1,73 @@
-/** 
- * Architechture component: 
- * This component uses the useBugs hook for react state,
- * the bugService for business logic (validation/counts),
- * The bugRepository for test data access.
-*/
-import React, { useState } from "react";
-import { useFieldValue } from "../../hooks/useFieldValue";
-import { useCollection } from "../../hooks/useCollection";
-import { bugService } from "../../services/bugService";
-import type { CollectedBug } from "../../types/collectedBug";
+import { useState } from 'react';
+import type { FormEvent } from 'react';
+import { useCollection } from '../../hooks/useCollection';
+import { useBugs } from '../../hooks/useBugs';
 
-interface FormErrors {
-  commonName?: string;
-  order?: string;
-}
+// Temporary: there is no login yet, so everyone is user 1
+const CURRENT_USER_ID = 1;
 
-export default function Collection({ bugCount, setBugCount }: {bugCount: number, setBugCount: React.Dispatch<React.SetStateAction<number>>}) {
-  
-  // state for form inputs
-  const commonNameField = useFieldValue("");
-  const scientificNameField = useFieldValue("");
-  const orderField = useFieldValue("");
-  const habitatField = useFieldValue("");
-
-  // state for validating errors
-  const [errors, setErrors] = useState<FormErrors>({} as FormErrors);
-
-  // USE THE HOOK HERE
+export default function Collection() {
   const { collectedBugs, addBug, removeBug } = useCollection();
+  const { bugs } = useBugs(); 
 
-  // handle validation and adding
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const [selectedBugId, setSelectedBugId] = useState('');
+  const [error, setError] = useState('');
+
+  // Only offer bugs that are not collected yet
+  const collectedIds = new Set(collectedBugs.map((item) => item.bugId));
+  const availableBugs = bugs.filter((bug) => !collectedIds.has(bug.id));
+
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    // validation logic (using service)
-    const newErrors = bugService.validateCollectedBug({
-        commonName: commonNameField.value,
-        order: orderField.value
-    });
-    
-    setErrors(newErrors as FormErrors);
-
-    // if no errors, add the bug
-    if (Object.keys(newErrors).length === 0) {
-      // USE SERVICE TO BUILD BUG
-      const newBug: CollectedBug = bugService.buildCollectedBug(
-        commonNameField.value,
-        scientificNameField.value,
-        orderField.value,
-        habitatField.value
-      );
-
-      // USE HOOK TO ADD BUG
-      addBug(newBug);
-
-      // USE SERVICE TO UPDATE COUNT
-      setBugCount((current) => bugService.adjustCount(current, 1));
-
-      // clear form
-      commonNameField.resetValue();
-      scientificNameField.resetValue();
-      orderField.resetValue();
-      habitatField.resetValue();
+    if (!selectedBugId) {
+      setError('Please choose a bug.');
+      return;
     }
-  };
 
-  // for deleting bug 
-  const handleDelete = (idToDelete: number) => {
-    // USE HOOK TO REMOVE BUG
-    removeBug(idToDelete);
-
-    // USE SERVICE TO UPDATE COUNT
-    setBugCount((current) => bugService.adjustCount(current, -1));
+    setError('');
+    await addBug({ userId: CURRENT_USER_ID, bugId: Number(selectedBugId) });
+    setSelectedBugId('');
   };
 
   return (
     <section className="collection">
       <h2>My Bug Collection</h2>
-      <p>Total Bugs Discovered: {bugCount}</p>
+      <p>Total Bugs Discovered: {collectedBugs.length}</p>
 
       <form onSubmit={handleSubmit}>
-        <h3>Add a New Bug</h3>
+        <h3>Collect a Bug</h3>
+        <select
+          value={selectedBugId}
+          onChange={(e) => setSelectedBugId(e.target.value)}
+          style={{ padding: "8px", marginRight: "10px" }}
+        >
+          <option value="">Choose a bug...</option>
+          {availableBugs.map((bug) => (
+            <option key={bug.id} value={bug.id}>
+              {bug.name}
+            </option>
+          ))}
+        </select>
         
-        <div>
-          <input 
-            name="commonName" 
-            placeholder="Common Name" 
-            value={commonNameField.value} 
-            onChange={e => commonNameField.setValue(e.target.value)} 
-          />
-          {errors.commonName && <span style={{ color: "red", fontSize: "12px" }}> {errors.commonName}</span>}
-        </div>
-        <br />
-
-        <div>
-          <input 
-            name="scientificName" 
-            placeholder="Scientific Name" 
-            value={scientificNameField.value} 
-            onChange={e => scientificNameField.setValue(e.target.value)} 
-          />
-        </div>
-        <br />
-
-        <div>
-          <input 
-            name="order" 
-            placeholder="Order (e.g. Coleoptera)" 
-            value={orderField.value} 
-            onChange={e => orderField.setValue(e.target.value)} 
-          />
-          {errors.order && <span style={{ color: "red", fontSize: "12px" }}> {errors.order}</span>}
-        </div>
-        <br />
-
-        <div>
-          <input 
-            name="habitat" 
-            placeholder="Habitat" 
-            value={habitatField.value} 
-            onChange={e => habitatField.setValue(e.target.value)} 
-          />
-        </div>
-        <br />
-
         <button type="submit">Add Bug</button>
+        
+        {error && <span style={{ color: 'red', fontSize: '12px', display: 'block', marginTop: '5px' }}> {error} </span>}
       </form>
+      
+      <br />
+      <br />
 
-      {/* List */}
       <ul>
-        {/* NOTICE: we map over collectedBugs now, not collectedSpecimens! */}
-        {collectedBugs.map((specimen) => (
-          <li key={specimen.id} style={{ marginBottom: "15px" }}>
-            <strong>{specimen.commonName}</strong> ({specimen.scientificName})
+        {collectedBugs.map((item) => (
+          <li key={item.id} style={{ marginBottom: '15px' }}>
+            <strong>{item.name}</strong> ({item.scientificName ?? 'no scientific name'})
             <br />
-            Order: {specimen.order} | Habitat: {specimen.habitat} | Collected: {specimen.dateCollected}
+            Category: {item.category} | Collected: {item.dateCollected.split('T')[0]}
             <br />
-            
-            <button 
-              onClick={() => handleDelete(specimen.id)}
-              style={{ color: "red", marginTop: "5px" }}
+            <button
+              onClick={() => removeBug(item.id)}
+              style={{ color: 'red', marginTop: '5px' }}
             >
               Delete
             </button>

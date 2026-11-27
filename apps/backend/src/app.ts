@@ -6,10 +6,10 @@ import type { Request, Response, NextFunction } from "express";
 // ---- Route imports (edit only under your own name) ----
 
 // KYRA
-
-import { bugRoutes } from "./routes/bugRoutes";
+import { bugRoutes } from "./routes/bugRoutes.js";
 
 // MICHAEL
+import collectedBugRoutes from './collectedBug/collectedBugRoutes.js';
 
 // ZACH
 
@@ -27,14 +27,14 @@ app.use(express.json());
 // ---- Route mounting (edit only under your own name) ----
 
 // KYRA
-
 app.use("/api/bugs", bugRoutes);
 
 // MICHAEL
+app.use('/api/collected-bugs', collectedBugRoutes);
 
 // ZACH
 
-// Central error handler: catches any error thrown inside a route
+// Central error handler
 app.use((
   error: unknown,
   _req: Request,
